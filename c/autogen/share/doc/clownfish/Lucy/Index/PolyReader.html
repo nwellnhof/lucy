@@ -150,33 +150,6 @@ Read-locking is off by default; supplying this argument turns it on.</p>
 </dd>
 </dl>
 </dd>
-<dt id="func_new">new</dt>
-<dd>
-<pre><code><span class="prefix">lucy_</span>PolyReader* <span class="comment">// incremented</span>
-<span class="prefix">lucy_</span><strong>PolyReader_new</strong>(
-    <span class="prefix">lucy_</span><a href="../../Lucy/Plan/Schema.html">Schema</a> *<strong>schema</strong>,
-    <span class="prefix">lucy_</span><a href="../../Lucy/Store/Folder.html">Folder</a> *<strong>folder</strong>,
-    <span class="prefix">lucy_</span><a href="../../Lucy/Index/Snapshot.html">Snapshot</a> *<strong>snapshot</strong>,
-    <span class="prefix">lucy_</span><a href="../../Lucy/Index/IndexManager.html">IndexManager</a> *<strong>manager</strong>,
-    <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>sub_readers</strong>
-);
-</code></pre>
-<p>Create a new PolyReader.</p>
-</dd>
-<dt id="func_init">init</dt>
-<dd>
-<pre><code><span class="prefix">lucy_</span>PolyReader*
-<span class="prefix">lucy_</span><strong>PolyReader_init</strong>(
-    <span class="prefix">lucy_</span>PolyReader *<strong>self</strong>,
-    <span class="prefix">lucy_</span><a href="../../Lucy/Plan/Schema.html">Schema</a> *<strong>schema</strong>,
-    <span class="prefix">lucy_</span><a href="../../Lucy/Store/Folder.html">Folder</a> *<strong>folder</strong>,
-    <span class="prefix">lucy_</span><a href="../../Lucy/Index/Snapshot.html">Snapshot</a> *<strong>snapshot</strong>,
-    <span class="prefix">lucy_</span><a href="../../Lucy/Index/IndexManager.html">IndexManager</a> *<strong>manager</strong>,
-    <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>sub_readers</strong>
-);
-</code></pre>
-<p>Initialize a PolyReader.</p>
-</dd>
 </dl>
 <h2>Methods</h2>
 <dl>

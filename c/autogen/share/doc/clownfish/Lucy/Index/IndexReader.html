@@ -107,21 +107,6 @@ to index data happens at the segment level via
 <a href="../../Lucy/Index/SegReader.html">SegReader</a>’s sub-components.</p>
 <h2>Functions</h2>
 <dl>
-<dt id="func_init">init</dt>
-<dd>
-<pre><code><span class="prefix">lucy_</span>IndexReader*
-<span class="prefix">lucy_</span><strong>IxReader_init</strong>(
-    <span class="prefix">lucy_</span>IndexReader *<strong>self</strong>,
-    <span class="prefix">lucy_</span><a href="../../Lucy/Plan/Schema.html">Schema</a> *<strong>schema</strong>,
-    <span class="prefix">lucy_</span><a href="../../Lucy/Store/Folder.html">Folder</a> *<strong>folder</strong>,
-    <span class="prefix">lucy_</span><a href="../../Lucy/Index/Snapshot.html">Snapshot</a> *<strong>snapshot</strong>,
-    <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>segments</strong>,
-    int32_t <strong>seg_tick</strong>,
-    <span class="prefix">lucy_</span><a href="../../Lucy/Index/IndexManager.html">IndexManager</a> *<strong>manager</strong>
-);
-</code></pre>
-<p>Abstract initializer.</p>
-</dd>
 <dt id="func_open">open</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>IndexReader* <span class="comment">// incremented</span>

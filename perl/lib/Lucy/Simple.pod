@@ -61,6 +61,49 @@ Later, search the index.
 Lucy::Simple is a stripped-down interface for the Apache Lucy search
 engine library.
 
+=head1 CONSTRUCTORS
+
+=head2 new
+
+    my $lucy = Lucy::Simple->new(
+        path     => '/path/to/index/',
+        language => 'en',
+    );
+
+Create a Lucy::Simple object, which can be used for both indexing and
+searching.  Both parameters C<path> and C<language> are required.
+
+=over
+
+=item *
+
+B<path> - Where the index directory should be located.  If no index
+is found at the specified location, one will be created.
+
+=item *
+
+B<language> - The language of the documents in your collection,
+indicated  by a two-letter ISO code.  12 languages are supported:
+
+    |-----------------------|
+    | Language   | ISO code |
+    |-----------------------|
+    | Danish     | da       |
+    | Dutch      | nl       |
+    | English    | en       |
+    | Finnish    | fi       |
+    | French     | fr       |
+    | German     | de       |
+    | Italian    | it       |
+    | Norwegian  | no       |
+    | Portuguese | pt       |
+    | Spanish    | es       |
+    | Swedish    | sv       |
+    | Russian    | ru       |
+    |-----------------------|
+
+=back
+
 =head1 METHODS
 
 =head2 add_doc
