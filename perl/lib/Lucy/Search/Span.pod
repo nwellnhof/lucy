@@ -57,6 +57,8 @@ offset might be measured in token positions.
         weight => 1.0,    # default 0.0
     );
 
+Create a new Span.
+
 =over
 
 =item *

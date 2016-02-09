@@ -45,10 +45,11 @@ against an ordered sequence of terms.
 =head2 new
 
     Lucy::Search::PhraseQuery->new(
-        self  => $phrase_query,  # required
-        field => $string,        # required
-        terms => $vector,        # required
+        field => $string,  # required
+        terms => $vector,  # required
     );
+
+Create a new PhraseQuery.
 
 =over
 

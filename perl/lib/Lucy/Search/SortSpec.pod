@@ -57,6 +57,8 @@ sort-by-doc rule as the last SortRule.
 
     my $sort_spec = Lucy::Search::SortSpec->new( rules => \@rules );
 
+Create a new SortSpec.
+
 =over
 
 =item *

@@ -101,6 +101,29 @@ base character.</p>
 because it might add or remove characters.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>Normalizer* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>Normalizer_new</strong>(
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>normalization_form</strong>,
+    bool <strong>case_fold</strong>,
+    bool <strong>strip_accents</strong>
+);
+</code></pre>
+<p>Create a new Normalizer.</p>
+<dl>
+<dt>normalization_form</dt>
+<dd><p>Unicode normalization form, can be one of
+‘NFC’, ‘NFKC’, ‘NFD’, ‘NFKD’. Defaults to ‘NFKC’.</p>
+</dd>
+<dt>case_fold</dt>
+<dd><p>Perform case folding, default is true.</p>
+</dd>
+<dt>strip_accents</dt>
+<dd><p>Strip accents, default is false.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>Normalizer*
@@ -111,6 +134,7 @@ because it might add or remove characters.</p>
     bool <strong>strip_accents</strong>
 );
 </code></pre>
+<p>Initialize a Normalizer.</p>
 <dl>
 <dt>normalization_form</dt>
 <dd><p>Unicode normalization form, can be one of

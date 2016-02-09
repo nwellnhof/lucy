@@ -97,6 +97,25 @@ span.prefix, span.comment {
 or more fields, each of which has a value.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>Doc* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>Doc_new</strong>(
+    void *<strong>fields</strong>,
+    int32_t <strong>doc_id</strong>
+);
+</code></pre>
+<p>Create a new Document.</p>
+<dl>
+<dt>fields</dt>
+<dd><p>Field-value pairs.</p>
+</dd>
+<dt>doc_id</dt>
+<dd><p>Internal Lucy document id.  Default of 0 (an
+invalid doc id).</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>Doc*
@@ -106,6 +125,7 @@ or more fields, each of which has a value.</p>
     int32_t <strong>doc_id</strong>
 );
 </code></pre>
+<p>Initialize a Document.</p>
 <dl>
 <dt>fields</dt>
 <dd><p>Field-value pairs.</p>

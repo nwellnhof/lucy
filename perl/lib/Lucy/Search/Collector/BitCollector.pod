@@ -54,6 +54,8 @@ entire set of documents which matches a query.
         bit_vector => $bit_vec,    # required
     );
 
+Create a new BitCollector.
+
 =over
 
 =item *

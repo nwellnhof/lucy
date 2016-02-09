@@ -53,6 +53,8 @@ indexes on a single machine.
         searchers => \@searchers,
     );
 
+Create a new PolySearcher.
+
 =over
 
 =item *

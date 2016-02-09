@@ -97,6 +97,24 @@ span.prefix, span.comment {
 against an ordered sequence of terms.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>PhraseQuery* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>PhraseQuery_new</strong>(
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>field</strong>,
+    <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>terms</strong>
+);
+</code></pre>
+<p>Create a new PhraseQuery.</p>
+<dl>
+<dt>field</dt>
+<dd><p>The field that the phrase must occur in.</p>
+</dd>
+<dt>terms</dt>
+<dd><p>The ordered array of terms that must match.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>PhraseQuery*
@@ -106,6 +124,7 @@ against an ordered sequence of terms.</p>
     <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>terms</strong>
 );
 </code></pre>
+<p>Initialize a PhraseQuery.</p>
 <dl>
 <dt>field</dt>
 <dd><p>The field that the phrase must occur in.</p>

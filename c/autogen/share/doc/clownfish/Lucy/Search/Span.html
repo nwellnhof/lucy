@@ -101,16 +101,16 @@ within an array of tokens, for example – in which case the start and
 offset might be measured in token positions.</p>
 <h2>Functions</h2>
 <dl>
-<dt id="func_init">init</dt>
+<dt id="func_new">new</dt>
 <dd>
-<pre><code><span class="prefix">lucy_</span>Span*
-<span class="prefix">lucy_</span><strong>Span_init</strong>(
-    <span class="prefix">lucy_</span>Span *<strong>self</strong>,
+<pre><code><span class="prefix">lucy_</span>Span* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>Span_new</strong>(
     int32_t <strong>offset</strong>,
     int32_t <strong>length</strong>,
     float <strong>weight</strong>
 );
 </code></pre>
+<p>Create a new Span.</p>
 <dl>
 <dt>offset</dt>
 <dd><p>Integer offset, unit is context-dependent.</p>
@@ -122,6 +122,19 @@ offset might be measured in token positions.</p>
 <dd><p>A floating point weight.</p>
 </dd>
 </dl>
+</dd>
+<dt id="func_init">init</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>Span*
+<span class="prefix">lucy_</span><strong>Span_init</strong>(
+    <span class="prefix">lucy_</span>Span *<strong>self</strong>,
+    int32_t <strong>offset</strong>,
+    int32_t <strong>length</strong>,
+    float <strong>weight</strong>
+);
+</code></pre>
+<p>Initialize a Span.  See <a href="../../Lucy/Search/Span.html#func_new">new()</a> for a description of the
+parameters.</p>
 </dd>
 </dl>
 <h2>Methods</h2>

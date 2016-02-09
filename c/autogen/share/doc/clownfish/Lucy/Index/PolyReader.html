@@ -110,6 +110,20 @@ accessed via <a href="../../Lucy/Index/SegReader.html">SegReader</a>.</p>
     <span class="prefix">lucy_</span><a href="../../Lucy/Index/IndexManager.html">IndexManager</a> *<strong>manager</strong>
 );
 </code></pre>
+<p>Create and open a PolyReader.</p>
+<dl>
+<dt>index</dt>
+<dd><p>Either a string filepath or a <a href="../../Lucy/Store/Folder.html">Folder</a>.</p>
+</dd>
+<dt>snapshot</dt>
+<dd><p>A Snapshot.  If not supplied, the most recent snapshot
+file will be used.</p>
+</dd>
+<dt>manager</dt>
+<dd><p>An <a href="../../Lucy/Index/IndexManager.html">IndexManager</a>.
+Read-locking is off by default; supplying this argument turns it on.</p>
+</dd>
+</dl>
 </dd>
 <dt id="func_do_open">do_open</dt>
 <dd>
@@ -121,6 +135,7 @@ accessed via <a href="../../Lucy/Index/SegReader.html">SegReader</a>.</p>
     <span class="prefix">lucy_</span><a href="../../Lucy/Index/IndexManager.html">IndexManager</a> *<strong>manager</strong>
 );
 </code></pre>
+<p>Initialize and open a PolyReader.</p>
 <dl>
 <dt>index</dt>
 <dd><p>Either a string filepath or a <a href="../../Lucy/Store/Folder.html">Folder</a>.</p>
@@ -146,6 +161,7 @@ Read-locking is off by default; supplying this argument turns it on.</p>
     <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>sub_readers</strong>
 );
 </code></pre>
+<p>Create a new PolyReader.</p>
 </dd>
 <dt id="func_init">init</dt>
 <dd>
@@ -159,6 +175,7 @@ Read-locking is off by default; supplying this argument turns it on.</p>
     <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>sub_readers</strong>
 );
 </code></pre>
+<p>Initialize a PolyReader.</p>
 </dd>
 </dl>
 <h2>Methods</h2>

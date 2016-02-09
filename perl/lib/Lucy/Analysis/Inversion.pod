@@ -48,6 +48,8 @@ iterate over.
         $seed,  # optional
     );
 
+Create a new Inversion.
+
 =over
 
 =item *

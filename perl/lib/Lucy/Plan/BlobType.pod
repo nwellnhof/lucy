@@ -48,6 +48,8 @@ containing binary data, which cannot be indexed or searched – only stored.
         stored => 1,  # default: false
     );
 
+Create a new BlobType.
+
 =over
 
 =item *

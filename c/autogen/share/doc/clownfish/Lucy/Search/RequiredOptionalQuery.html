@@ -98,6 +98,24 @@ and one Query which SHOULD match.  When only the required Query matches,
 its score is passed along; when both match, the scores are summed.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>RequiredOptionalQuery* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>ReqOptQuery_new</strong>(
+    <span class="prefix">lucy_</span><a href="../../Lucy/Search/Query.html">Query</a> *<strong>required_query</strong>,
+    <span class="prefix">lucy_</span><a href="../../Lucy/Search/Query.html">Query</a> *<strong>optional_query</strong>
+);
+</code></pre>
+<p>Create a new RequiredOptionalQuery.</p>
+<dl>
+<dt>required_query</dt>
+<dd><p>Query must must match.</p>
+</dd>
+<dt>optional_query</dt>
+<dd><p>Query which should match.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>RequiredOptionalQuery*
@@ -107,6 +125,7 @@ its score is passed along; when both match, the scores are summed.</p>
     <span class="prefix">lucy_</span><a href="../../Lucy/Search/Query.html">Query</a> *<strong>optional_query</strong>
 );
 </code></pre>
+<p>Initialize a RequiredOptionalQuery.</p>
 <dl>
 <dt>required_query</dt>
 <dd><p>Query must must match.</p>

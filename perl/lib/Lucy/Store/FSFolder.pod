@@ -46,6 +46,8 @@ directory and multiple files.
         path => '/path/to/folder',
     );
 
+Create a new Folder.
+
 =over
 
 =item *

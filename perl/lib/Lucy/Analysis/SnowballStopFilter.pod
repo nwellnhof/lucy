@@ -86,6 +86,8 @@ supply your own.
         stoplist => \%stoplist,
     );
 
+Create a new SnowballStopFilter.
+
 =over
 
 =item *

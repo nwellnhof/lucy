@@ -99,6 +99,13 @@ Typical usage might include e.g. returning a NoMatchQuery when a
 string.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>NoMatchQuery* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>NoMatchQuery_new</strong>(void);
+</code></pre>
+<p>Constructor. Takes no arguments.</p>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>NoMatchQuery*
@@ -106,7 +113,7 @@ string.</p>
     <span class="prefix">lucy_</span>NoMatchQuery *<strong>self</strong>
 );
 </code></pre>
-<p>Constructor. Takes no arguments.</p>
+<p>Initialize a NoMatchQuery.</p>
 </dd>
 </dl>
 <h2>Methods</h2>

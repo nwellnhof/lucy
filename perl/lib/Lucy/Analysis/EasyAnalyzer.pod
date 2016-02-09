@@ -72,6 +72,8 @@ Supported languages:
         language  => 'es',
     );
 
+Create a new EasyAnalyzer.
+
 =over
 
 =item *

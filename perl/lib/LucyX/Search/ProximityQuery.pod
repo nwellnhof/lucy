@@ -46,11 +46,12 @@ against an ordered sequence of terms.
 =head2 new
 
     LucyX::Search::ProximityQuery->new(
-        self   => $proximity_query,  # required
-        field  => $string,           # required
-        terms  => $vector,           # required
-        within => $int,              # required
+        field  => $string,  # required
+        terms  => $vector,  # required
+        within => $int,     # required
     );
+
+Create a new ProximityQuery.
 
 =over
 

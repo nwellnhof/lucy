@@ -51,6 +51,8 @@ its score is passed along; when both match, the scores are summed.
         optional_query => $bar_query,    # required
     );
 
+Create a new RequiredOptionalQuery.
+
 =over
 
 =item *

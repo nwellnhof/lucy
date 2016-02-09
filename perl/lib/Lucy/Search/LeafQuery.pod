@@ -63,6 +63,8 @@ search a LeafQuery causes an error.
         field => 'content',               # default: undef
     );
 
+Create a new LeafQuery.
+
 =over
 
 =item *

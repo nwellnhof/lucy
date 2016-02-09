@@ -99,6 +99,36 @@ and phrases correctly and efficiently, using special-purpose data generated
 at index-time.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>Highlighter* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>Highlighter_new</strong>(
+    <span class="prefix">lucy_</span><a href="../../Lucy/Search/Searcher.html">Searcher</a> *<strong>searcher</strong>,
+    <span class="prefix">cfish_</span><a href="../../Clownfish/Obj.html">Obj</a> *<strong>query</strong>,
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>field</strong>,
+    uint32_t <strong>excerpt_length</strong>
+);
+</code></pre>
+<p>Create a new Highlighter.</p>
+<dl>
+<dt>searcher</dt>
+<dd><p>An object which inherits from
+<a href="../../Lucy/Search/Searcher.html">Searcher</a>, such as an
+<a href="../../Lucy/Search/IndexSearcher.html">IndexSearcher</a>.</p>
+</dd>
+<dt>query</dt>
+<dd><p>Query object or a query string.</p>
+</dd>
+<dt>field</dt>
+<dd><p>The name of the field from which to draw the excerpt.  The
+field must marked as be <code>highlightable</code> (see
+<a href="../../Lucy/Plan/FieldType.html">FieldType</a>).</p>
+</dd>
+<dt>excerpt_length</dt>
+<dd><p>Maximum length of the excerpt, in characters.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>Highlighter*
@@ -110,6 +140,7 @@ at index-time.</p>
     uint32_t <strong>excerpt_length</strong>
 );
 </code></pre>
+<p>Initialize a Highlighter.</p>
 <dl>
 <dt>searcher</dt>
 <dd><p>An object which inherits from

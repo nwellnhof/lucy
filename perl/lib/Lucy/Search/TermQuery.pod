@@ -49,6 +49,8 @@ individual terms in a specific field.
         term  => 'foo',        # required
     );
 
+Create a new TermQuery.
+
 =over
 
 =item *

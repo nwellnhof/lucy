@@ -76,8 +76,8 @@ Abstract constructor.
 
 =item *
 
-B<boost> - A scoring multiplier, affecting the Query’s relative
-contribution to each document’s score.  Typically defaults to 1.0, but
+B<boost> - A scoring multiplier, affecting the Query's relative
+contribution to each document's score.  Typically defaults to 1.0, but
 subclasses which do not contribute to document scores such as NOTQuery
 and MatchAllQuery default to 0.0 instead.
 

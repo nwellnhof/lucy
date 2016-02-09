@@ -55,6 +55,8 @@ requires a SortSpec with two SortRule elements.
         reverse => 1,
     );
 
+Create a new SortRule.
+
 =over
 
 =item *

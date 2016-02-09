@@ -55,6 +55,8 @@ because it might add or remove characters.
         strip_accents      => 0,
     );
 
+Create a new Normalizer.
+
 =over
 
 =item *

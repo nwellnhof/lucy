@@ -97,6 +97,20 @@ span.prefix, span.comment {
 containing binary data, which cannot be indexed or searched – only stored.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>BlobType* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>BlobType_new</strong>(
+    bool <strong>stored</strong>
+);
+</code></pre>
+<p>Create a new BlobType.</p>
+<dl>
+<dt>stored</dt>
+<dd><p>boolean indicating whether the field should be stored.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>BlobType*
@@ -105,19 +119,12 @@ containing binary data, which cannot be indexed or searched – only stored.</p>
     bool <strong>stored</strong>
 );
 </code></pre>
+<p>Initialize a BlobType.</p>
 <dl>
 <dt>stored</dt>
 <dd><p>boolean indicating whether the field should be stored.</p>
 </dd>
 </dl>
-</dd>
-<dt id="func_new">new</dt>
-<dd>
-<pre><code><span class="prefix">lucy_</span>BlobType* <span class="comment">// incremented</span>
-<span class="prefix">lucy_</span><strong>BlobType_new</strong>(
-    bool <strong>stored</strong>
-);
-</code></pre>
 </dd>
 </dl>
 <h2>Methods</h2>

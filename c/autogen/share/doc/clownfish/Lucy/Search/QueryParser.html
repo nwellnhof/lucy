@@ -114,6 +114,41 @@ used instead of the QueryParser’s default fields).</li>
 </ul>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>QueryParser* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>QParser_new</strong>(
+    <span class="prefix">lucy_</span><a href="../../Lucy/Plan/Schema.html">Schema</a> *<strong>schema</strong>,
+    <span class="prefix">lucy_</span><a href="../../Lucy/Analysis/Analyzer.html">Analyzer</a> *<strong>analyzer</strong>,
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>default_boolop</strong>,
+    <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>fields</strong>
+);
+</code></pre>
+<p>Constructor.</p>
+<dl>
+<dt>schema</dt>
+<dd><p>A <a href="../../Lucy/Plan/Schema.html">Schema</a>.</p>
+</dd>
+<dt>analyzer</dt>
+<dd><p>An <a href="../../Lucy/Analysis/Analyzer.html">Analyzer</a>.
+Ordinarily, the analyzers specified by each field’s definition will be
+used, but if <code>analyzer</code> is supplied, it will override and be used for
+all fields.  This can lead to mismatches between what is in the index
+and what is being searched for, so use caution.</p>
+</dd>
+<dt>fields</dt>
+<dd><p>The names of the fields which will be searched against.
+Defaults to those fields which are defined as indexed in the supplied
+Schema.</p>
+</dd>
+<dt>default_boolop</dt>
+<dd><p>Two possible values: ‘AND’ and ‘OR’.  The default
+is ‘OR’, which means: return documents which match any of the query
+terms.  If you want only documents which match all of the query terms,
+set this to ‘AND’.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>QueryParser*
@@ -125,7 +160,7 @@ used instead of the QueryParser’s default fields).</li>
     <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>fields</strong>
 );
 </code></pre>
-<p>Constructor.</p>
+<p>Initialize a QueryParser.</p>
 <dl>
 <dt>schema</dt>
 <dd><p>A <a href="../../Lucy/Plan/Schema.html">Schema</a>.</p>

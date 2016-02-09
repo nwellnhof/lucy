@@ -126,6 +126,24 @@ supply your own.</p>
 </code></pre>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>SnowballStopFilter* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>SnowStop_new</strong>(
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>language</strong>,
+    <span class="prefix">cfish_</span><a href="../../Clownfish/Hash.html">Hash</a> *<strong>stoplist</strong>
+);
+</code></pre>
+<p>Create a new SnowballStopFilter.</p>
+<dl>
+<dt>stoplist</dt>
+<dd><p>A hash with stopwords as the keys.</p>
+</dd>
+<dt>language</dt>
+<dd><p>The ISO code for a supported language.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>SnowballStopFilter*
@@ -135,6 +153,7 @@ supply your own.</p>
     <span class="prefix">cfish_</span><a href="../../Clownfish/Hash.html">Hash</a> *<strong>stoplist</strong>
 );
 </code></pre>
+<p>Initialize a SnowballStopFilter.</p>
 <dl>
 <dt>stoplist</dt>
 <dd><p>A hash with stopwords as the keys.</p>

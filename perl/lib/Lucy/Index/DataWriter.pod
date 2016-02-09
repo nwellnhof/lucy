@@ -51,6 +51,8 @@ L<Architecture|Lucy::Plan::Architecture>.
         polyreader => $polyreader,    # required
     );
 
+Abstract constructor.
+
 =over
 
 =item *

@@ -52,6 +52,8 @@ or more fields, each of which has a value.
         fields => { foo => 'foo foo', bar => 'bar bar' },
     );
 
+Create a new Document.
+
 =over
 
 =item *

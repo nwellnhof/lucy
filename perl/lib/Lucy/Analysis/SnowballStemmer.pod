@@ -52,6 +52,8 @@ search for ‘horse’ will also match documents containing ‘horses’ and
 
     my $stemmer = Lucy::Analysis::SnowballStemmer->new( language => 'es' );
 
+Create a new SnowballStemmer.
+
 =over
 
 =item *

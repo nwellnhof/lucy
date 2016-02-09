@@ -49,6 +49,8 @@ of their result sets.  Documents which match receive a summed score.
         children => [ $foo_query, $bar_query ],
     );
 
+Create a new ANDQuery.
+
 =over
 
 =item *

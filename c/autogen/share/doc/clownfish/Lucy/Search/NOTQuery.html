@@ -101,6 +101,20 @@ against its inverse document set.  All matching docs recieve a score of
 semantics.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>NOTQuery* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>NOTQuery_new</strong>(
+    <span class="prefix">lucy_</span><a href="../../Lucy/Search/Query.html">Query</a> *<strong>negated_query</strong>
+);
+</code></pre>
+<p>Create a new NOTQuery.</p>
+<dl>
+<dt>negated_query</dt>
+<dd><p>The Query whose result set should be inverted.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>NOTQuery*
@@ -109,6 +123,7 @@ semantics.</p>
     <span class="prefix">lucy_</span><a href="../../Lucy/Search/Query.html">Query</a> *<strong>negated_query</strong>
 );
 </code></pre>
+<p>Initialize a NOTQuery.</p>
 <dl>
 <dt>negated_query</dt>
 <dd><p>The Query whose result set should be inverted.</p>

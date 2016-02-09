@@ -97,6 +97,24 @@ span.prefix, span.comment {
 indexes on a single machine.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>PolySearcher* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>PolySearcher_new</strong>(
+    <span class="prefix">lucy_</span><a href="../../Lucy/Plan/Schema.html">Schema</a> *<strong>schema</strong>,
+    <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>searchers</strong>
+);
+</code></pre>
+<p>Create a new PolySearcher.</p>
+<dl>
+<dt>schema</dt>
+<dd><p>A Schema.</p>
+</dd>
+<dt>searchers</dt>
+<dd><p>An array of Searchers.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>PolySearcher*
@@ -106,6 +124,7 @@ indexes on a single machine.</p>
     <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>searchers</strong>
 );
 </code></pre>
+<p>Initialize a PolySearcher.</p>
 <dl>
 <dt>schema</dt>
 <dd><p>A Schema.</p>

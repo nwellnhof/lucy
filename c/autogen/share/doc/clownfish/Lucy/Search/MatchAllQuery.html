@@ -99,6 +99,13 @@ which matches against another part of the query will be ranked higher than
 a document which matches only via the MatchAllQuery.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>MatchAllQuery* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>MatchAllQuery_new</strong>(void);
+</code></pre>
+<p>Constructor.  Takes no arguments.</p>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>MatchAllQuery*
@@ -106,7 +113,7 @@ a document which matches only via the MatchAllQuery.</p>
     <span class="prefix">lucy_</span>MatchAllQuery *<strong>self</strong>
 );
 </code></pre>
-<p>Constructor.  Takes no arguments.</p>
+<p>Initialize a MatchAllQuery.</p>
 </dd>
 </dl>
 <h2>Methods</h2>

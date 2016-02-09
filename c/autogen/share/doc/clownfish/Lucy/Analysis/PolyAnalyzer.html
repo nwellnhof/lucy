@@ -121,6 +121,30 @@ tr =&gt; Turkish,
 </code></pre>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>PolyAnalyzer* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>PolyAnalyzer_new</strong>(
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>language</strong>,
+    <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>analyzers</strong>
+);
+</code></pre>
+<p>Create a new PolyAnalyzer.</p>
+<dl>
+<dt>language</dt>
+<dd><p>An ISO code from the list of supported languages.
+DEPRECATED, use <a href="../../Lucy/Analysis/EasyAnalyzer.html">EasyAnalyzer</a> instead.</p>
+</dd>
+<dt>analyzers</dt>
+<dd><p>An array of Analyzers.  The order of the analyzers
+matters.  Don’t put a SnowballStemmer before a RegexTokenizer (can’t stem whole
+documents or paragraphs – just individual words), or a SnowballStopFilter
+after a SnowballStemmer (stemmed words, e.g. “themselv”, will not appear in a
+stoplist).  In general, the sequence should be: tokenize, normalize,
+stopalize, stem.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>PolyAnalyzer*
@@ -130,6 +154,7 @@ tr =&gt; Turkish,
     <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>analyzers</strong>
 );
 </code></pre>
+<p>Initialize a PolyAnalyzer.</p>
 <dl>
 <dt>language</dt>
 <dd><p>An ISO code from the list of supported languages.

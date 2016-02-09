@@ -101,6 +101,20 @@ span.prefix, span.comment {
 modified, a new IndexSearcher must be opened to access the changes.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>IndexSearcher* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>IxSearcher_new</strong>(
+    <span class="prefix">cfish_</span><a href="../../Clownfish/Obj.html">Obj</a> *<strong>index</strong>
+);
+</code></pre>
+<p>Create a new IndexSearcher.</p>
+<dl>
+<dt>index</dt>
+<dd><p>Either a string filepath, a Folder, or an IndexReader.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>IndexSearcher*
@@ -109,6 +123,7 @@ modified, a new IndexSearcher must be opened to access the changes.</p>
     <span class="prefix">cfish_</span><a href="../../Clownfish/Obj.html">Obj</a> *<strong>index</strong>
 );
 </code></pre>
+<p>Initialize an IndexSearcher.</p>
 <dl>
 <dt>index</dt>
 <dd><p>Either a string filepath, a Folder, or an IndexReader.</p>

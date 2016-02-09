@@ -56,6 +56,8 @@ semantics.
         negated_query => $query,
     );
 
+Create a new NOTQuery.
+
 =over
 
 =item *

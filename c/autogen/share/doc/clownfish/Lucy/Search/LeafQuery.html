@@ -101,6 +101,24 @@ Ultimately, they must be transformed, typically into either
 search a LeafQuery causes an error.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>LeafQuery* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>LeafQuery_new</strong>(
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>field</strong>,
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>text</strong>
+);
+</code></pre>
+<p>Create a new LeafQuery.</p>
+<dl>
+<dt>field</dt>
+<dd><p>Optional field name.</p>
+</dd>
+<dt>text</dt>
+<dd><p>Raw query text.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>LeafQuery*
@@ -110,6 +128,7 @@ search a LeafQuery causes an error.</p>
     <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>text</strong>
 );
 </code></pre>
+<p>Initialize a LeafQuery.</p>
 <dl>
 <dt>field</dt>
 <dd><p>Optional field name.</p>

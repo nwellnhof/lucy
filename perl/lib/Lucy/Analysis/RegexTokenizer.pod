@@ -82,6 +82,8 @@ punctuation as well as whitespace when determining token boundaries.
         pattern => '\w+',    # required
     );
 
+Create a new RegexTokenizer.
+
 =over
 
 =item *

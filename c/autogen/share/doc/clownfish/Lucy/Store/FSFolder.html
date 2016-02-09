@@ -97,14 +97,14 @@ span.prefix, span.comment {
 directory and multiple files.</p>
 <h2>Functions</h2>
 <dl>
-<dt id="func_init">init</dt>
+<dt id="func_new">new</dt>
 <dd>
-<pre><code><span class="prefix">lucy_</span>FSFolder*
-<span class="prefix">lucy_</span><strong>FSFolder_init</strong>(
-    <span class="prefix">lucy_</span>FSFolder *<strong>self</strong>,
+<pre><code><span class="prefix">lucy_</span>FSFolder* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>FSFolder_new</strong>(
     <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>path</strong>
 );
 </code></pre>
+<p>Create a new Folder.</p>
 <dl>
 <dt>path</dt>
 <dd><p>Location of the index. If the specified directory does
@@ -113,6 +113,17 @@ misconfigured read applications from spawning bogus files – so it may
 be necessary to create the directory yourself.</p>
 </dd>
 </dl>
+</dd>
+<dt id="func_init">init</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>FSFolder*
+<span class="prefix">lucy_</span><strong>FSFolder_init</strong>(
+    <span class="prefix">lucy_</span>FSFolder *<strong>self</strong>,
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>path</strong>
+);
+</code></pre>
+<p>Initialize a Folder.  See <a href="../../Lucy/Store/FSFolder.html#func_new">new()</a> for a description of the
+parameters.</p>
 </dd>
 </dl>
 <h2>Inheritance</h2>

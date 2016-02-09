@@ -109,6 +109,16 @@ shared volume.</p>
     <span class="prefix">lucy_</span><a href="../../Lucy/Index/IndexManager.html">IndexManager</a> *<strong>manager</strong>
 );
 </code></pre>
+<p>Open a new BackgroundMerger.</p>
+<dl>
+<dt>index</dt>
+<dd><p>Either a string filepath or a Folder.</p>
+</dd>
+<dt>manager</dt>
+<dd><p>An IndexManager.  If not supplied, an IndexManager with
+a 10-second write lock timeout will be created.</p>
+</dd>
+</dl>
 </dd>
 <dt id="func_init">init</dt>
 <dd>
@@ -119,7 +129,7 @@ shared volume.</p>
     <span class="prefix">lucy_</span><a href="../../Lucy/Index/IndexManager.html">IndexManager</a> *<strong>manager</strong>
 );
 </code></pre>
-<p>Open a new BackgroundMerger.</p>
+<p>Initialize a BackgroundMerger.</p>
 <dl>
 <dt>index</dt>
 <dd><p>Either a string filepath or a Folder.</p>

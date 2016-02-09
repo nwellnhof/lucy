@@ -116,6 +116,20 @@ tr =&gt; Turkish,
 </code></pre>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>EasyAnalyzer* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>EasyAnalyzer_new</strong>(
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>language</strong>
+);
+</code></pre>
+<p>Create a new EasyAnalyzer.</p>
+<dl>
+<dt>language</dt>
+<dd><p>An ISO code from the list of supported languages.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>EasyAnalyzer*
@@ -124,6 +138,7 @@ tr =&gt; Turkish,
     <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>language</strong>
 );
 </code></pre>
+<p>Initialize an EasyAnalyzer.</p>
 <dl>
 <dt>language</dt>
 <dd><p>An ISO code from the list of supported languages.</p>

@@ -96,6 +96,21 @@ span.prefix, span.comment {
 <p>BitVector is a growable array of bits.  All bits are initially zero.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>BitVector* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>BitVec_new</strong>(
+    uint32_t <strong>capacity</strong>
+);
+</code></pre>
+<p>Create a new BitVector.</p>
+<dl>
+<dt>capacity</dt>
+<dd><p>The number of bits that the initial array should be
+able to hold.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>BitVector*
@@ -104,6 +119,7 @@ span.prefix, span.comment {
     uint32_t <strong>capacity</strong>
 );
 </code></pre>
+<p>Initialize a BitVector.</p>
 <dl>
 <dt>capacity</dt>
 <dd><p>The number of bits that the initial array should be

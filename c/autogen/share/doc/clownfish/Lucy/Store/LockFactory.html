@@ -99,6 +99,24 @@ lockfiles, but LockFactory subclasses which are implemented using
 alternatives such as flock() are possible.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>LockFactory* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>LockFact_new</strong>(
+    <span class="prefix">lucy_</span><a href="../../Lucy/Store/Folder.html">Folder</a> *<strong>folder</strong>,
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>host</strong>
+);
+</code></pre>
+<p>Create a new LockFactory.</p>
+<dl>
+<dt>folder</dt>
+<dd><p>A <a href="../../Lucy/Store/Folder.html">Folder</a>.</p>
+</dd>
+<dt>host</dt>
+<dd><p>An identifier which should be unique per-machine.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>LockFactory*
@@ -108,6 +126,7 @@ alternatives such as flock() are possible.</p>
     <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>host</strong>
 );
 </code></pre>
+<p>Initialize a LockFactory.</p>
 <dl>
 <dt>folder</dt>
 <dd><p>A <a href="../../Lucy/Store/Folder.html">Folder</a>.</p>

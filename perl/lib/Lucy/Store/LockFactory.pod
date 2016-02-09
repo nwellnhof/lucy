@@ -60,6 +60,8 @@ alternatives such as flock() are possible.
         host   => $hostname,    # required
     );
 
+Create a new LockFactory.
+
 =over
 
 =item *

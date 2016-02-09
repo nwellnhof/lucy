@@ -80,6 +80,8 @@ Supported languages:
     my $polyanalyzer = Lucy::Analysis::PolyAnalyzer->new(
         analyzers => [ $tokenizer, $normalizer, $stemmer, ], );
 
+Create a new PolyAnalyzer.
+
 =over
 
 =item *

@@ -97,6 +97,20 @@ span.prefix, span.comment {
 <a href="../../Lucy/Store/Folder.html">Folder</a>, primarily used for testing and development.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>RAMFolder* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>RAMFolder_new</strong>(
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>path</strong>
+);
+</code></pre>
+<p>Create a new RAMFolder.</p>
+<dl>
+<dt>path</dt>
+<dd><p>Relative path, used for subfolders.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>RAMFolder*
@@ -105,6 +119,7 @@ span.prefix, span.comment {
     <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>path</strong>
 );
 </code></pre>
+<p>Initialize a RAMFolder.</p>
 <dl>
 <dt>path</dt>
 <dd><p>Relative path, used for subfolders.</p>

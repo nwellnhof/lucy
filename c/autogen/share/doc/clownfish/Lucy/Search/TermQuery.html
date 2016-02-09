@@ -97,6 +97,24 @@ span.prefix, span.comment {
 individual terms in a specific field.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>TermQuery* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>TermQuery_new</strong>(
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>field</strong>,
+    <span class="prefix">cfish_</span><a href="../../Clownfish/Obj.html">Obj</a> *<strong>term</strong>
+);
+</code></pre>
+<p>Create a new TermQuery.</p>
+<dl>
+<dt>field</dt>
+<dd><p>Field name.</p>
+</dd>
+<dt>term</dt>
+<dd><p>Term text.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>TermQuery*
@@ -106,6 +124,7 @@ individual terms in a specific field.</p>
     <span class="prefix">cfish_</span><a href="../../Clownfish/Obj.html">Obj</a> *<strong>term</strong>
 );
 </code></pre>
+<p>Initialize a TermQuery.</p>
 <dl>
 <dt>field</dt>
 <dd><p>Field name.</p>

@@ -49,6 +49,8 @@ implement one of each.
         seg_tick => $seg_reader->get_seg_tick,    # default -1
     );
 
+Abstract constructor.
+
 =over
 
 =item *

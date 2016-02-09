@@ -102,12 +102,36 @@ normalize the text so that it can be searched for individual words.</p>
 <a href="../../Lucy/Plan/StringType.html">StringType</a>.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>FullTextType* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>FullTextType_new</strong>(
+    <span class="prefix">lucy_</span><a href="../../Lucy/Analysis/Analyzer.html">Analyzer</a> *<strong>analyzer</strong>
+);
+</code></pre>
+<p>Create a new FullTextType.</p>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>FullTextType*
 <span class="prefix">lucy_</span><strong>FullTextType_init</strong>(
     <span class="prefix">lucy_</span>FullTextType *<strong>self</strong>,
     <span class="prefix">lucy_</span><a href="../../Lucy/Analysis/Analyzer.html">Analyzer</a> *<strong>analyzer</strong>
+);
+</code></pre>
+<p>Initialize a FullTextType.</p>
+</dd>
+<dt id="func_init2">init2</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>FullTextType*
+<span class="prefix">lucy_</span><strong>FullTextType_init2</strong>(
+    <span class="prefix">lucy_</span>FullTextType *<strong>self</strong>,
+    <span class="prefix">lucy_</span><a href="../../Lucy/Analysis/Analyzer.html">Analyzer</a> *<strong>analyzer</strong>,
+    float <strong>boost</strong>,
+    bool <strong>indexed</strong>,
+    bool <strong>stored</strong>,
+    bool <strong>sortable</strong>,
+    bool <strong>highlightable</strong>
 );
 </code></pre>
 <dl>
@@ -131,14 +155,6 @@ normalize the text so that it can be searched for individual words.</p>
 highlightable.</p>
 </dd>
 </dl>
-</dd>
-<dt id="func_new">new</dt>
-<dd>
-<pre><code><span class="prefix">lucy_</span>FullTextType* <span class="comment">// incremented</span>
-<span class="prefix">lucy_</span><strong>FullTextType_new</strong>(
-    <span class="prefix">lucy_</span><a href="../../Lucy/Analysis/Analyzer.html">Analyzer</a> *<strong>analyzer</strong>
-);
-</code></pre>
 </dd>
 </dl>
 <h2>Methods</h2>

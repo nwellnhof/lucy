@@ -100,6 +100,21 @@ search for ‘horse’ will also match documents containing ‘horses’ and
 ‘horsing’.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>SnowballStemmer* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>SnowStemmer_new</strong>(
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>language</strong>
+);
+</code></pre>
+<p>Create a new SnowballStemmer.</p>
+<dl>
+<dt>language</dt>
+<dd><p>A two-letter ISO code identifying a language supported
+by Snowball.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>SnowballStemmer*
@@ -108,6 +123,7 @@ search for ‘horse’ will also match documents containing ‘horses’ and
     <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>language</strong>
 );
 </code></pre>
+<p>Initialize a SnowballStemmer.</p>
 <dl>
 <dt>language</dt>
 <dd><p>A two-letter ISO code identifying a language supported

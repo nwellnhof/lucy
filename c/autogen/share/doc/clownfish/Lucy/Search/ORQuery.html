@@ -99,6 +99,20 @@ result sets.  Matching documents recieve a summed score from all matching
 child Queries.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>ORQuery* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>ORQuery_new</strong>(
+    <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>children</strong>
+);
+</code></pre>
+<p>Create a new ORQuery.</p>
+<dl>
+<dt>children</dt>
+<dd><p>An array of child Queries.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>ORQuery*
@@ -107,6 +121,7 @@ child Queries.</p>
     <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>children</strong>
 );
 </code></pre>
+<p>Initialize an ORQuery.</p>
 <dl>
 <dt>children</dt>
 <dd><p>An array of child Queries.</p>

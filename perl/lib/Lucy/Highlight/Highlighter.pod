@@ -58,6 +58,8 @@ at index-time.
         excerpt_length => 150,          # default: 200
     );
 
+Create a new Highlighter.
+
 =over
 
 =item *

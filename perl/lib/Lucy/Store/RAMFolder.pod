@@ -49,6 +49,8 @@ L<Folder|Lucy::Store::Folder>, primarily used for testing and development.
         path => $relative_path,   # default: empty string
     );
 
+Create a new RAMFolder.
+
 =over
 
 =item *

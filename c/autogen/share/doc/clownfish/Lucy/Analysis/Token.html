@@ -132,6 +132,29 @@ produce a phrase match for the query <code>&quot;three blind mice&quot;</code>.<
     int32_t <strong>pos_inc</strong>
 );
 </code></pre>
+<p>Create a new Token.</p>
+<dl>
+<dt>text</dt>
+<dd><p>A UTF-8 string.</p>
+</dd>
+<dt>len</dt>
+<dd><p>Size of the string in bytes.</p>
+</dd>
+<dt>start_offset</dt>
+<dd><p>Start offset into the original document in Unicode
+code points.</p>
+</dd>
+<dt>start_offset</dt>
+<dd><p>End offset into the original document in Unicode
+code points.</p>
+</dd>
+<dt>boost</dt>
+<dd><p>Per-token weight.</p>
+</dd>
+<dt>pos_inc</dt>
+<dd><p>Position increment for phrase matching.</p>
+</dd>
+</dl>
 </dd>
 <dt id="func_init">init</dt>
 <dd>
@@ -146,6 +169,7 @@ produce a phrase match for the query <code>&quot;three blind mice&quot;</code>.<
     int32_t <strong>pos_inc</strong>
 );
 </code></pre>
+<p>Initialize a Token.</p>
 <dl>
 <dt>text</dt>
 <dd><p>A UTF-8 string.</p>

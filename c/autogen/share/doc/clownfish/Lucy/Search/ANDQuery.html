@@ -98,6 +98,20 @@ only when all of its children match, so its result set is the intersection
 of their result sets.  Documents which match receive a summed score.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>ANDQuery* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>ANDQuery_new</strong>(
+    <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>children</strong>
+);
+</code></pre>
+<p>Create a new ANDQuery.</p>
+<dl>
+<dt>children</dt>
+<dd><p>An array of child Queries.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>ANDQuery*
@@ -106,6 +120,7 @@ of their result sets.  Documents which match receive a summed score.</p>
     <span class="prefix">cfish_</span><a href="../../Clownfish/Vector.html">Vector</a> *<strong>children</strong>
 );
 </code></pre>
+<p>Initialize an ANDQuery.</p>
 <dl>
 <dt>children</dt>
 <dd><p>An array of child Queries.</p>

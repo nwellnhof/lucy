@@ -66,6 +66,8 @@ defining rules which may change from process to process.
         host => $hostname,    # default: ""
     );
 
+Create a new IndexManager.
+
 =over
 
 =item *

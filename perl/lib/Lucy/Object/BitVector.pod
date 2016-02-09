@@ -48,6 +48,8 @@ BitVector is a growable array of bits.  All bits are initially zero.
         capacity => $doc_max + 1,   # default 0,
     );
 
+Create a new BitVector.
+
 =over
 
 =item *

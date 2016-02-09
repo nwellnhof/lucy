@@ -50,6 +50,8 @@ child Queries.
         children => [ $foo_query, $bar_query ],
     );
 
+Create a new ORQuery.
+
 =over
 
 =item *

@@ -119,6 +119,23 @@ Leaves
 punctuation as well as whitespace when determining token boundaries.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>RegexTokenizer* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>RegexTokenizer_new</strong>(
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>pattern</strong>
+);
+</code></pre>
+<p>Create a new RegexTokenizer.</p>
+<dl>
+<dt>pattern</dt>
+<dd><p>A string specifying a Perl-syntax regular expression
+which should match one token.  The default value is
+<code>\w+(?:[\x{2019}']\w+)*</code>, which matches “it’s” as well as
+“it” and “O’Henry’s” as well as “Henry”.</p>
+</dd>
+</dl>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>RegexTokenizer*
@@ -127,6 +144,7 @@ punctuation as well as whitespace when determining token boundaries.</p>
     <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>pattern</strong>
 );
 </code></pre>
+<p>Initilaize a RegexTokenizer.</p>
 <dl>
 <dt>pattern</dt>
 <dd><p>A string specifying a Perl-syntax regular expression

@@ -96,11 +96,31 @@ span.prefix, span.comment {
 <p>Lucy::Plan::StringType is used for “exact-match” strings.</p>
 <h2>Functions</h2>
 <dl>
+<dt id="func_new">new</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>StringType* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>StringType_new</strong>(void);
+</code></pre>
+<p>Create a new StringType.</p>
+</dd>
 <dt id="func_init">init</dt>
 <dd>
 <pre><code><span class="prefix">lucy_</span>StringType*
 <span class="prefix">lucy_</span><strong>StringType_init</strong>(
     <span class="prefix">lucy_</span>StringType *<strong>self</strong>
+);
+</code></pre>
+<p>Initialize a StringType.</p>
+</dd>
+<dt id="func_init2">init2</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>StringType*
+<span class="prefix">lucy_</span><strong>StringType_init2</strong>(
+    <span class="prefix">lucy_</span>StringType *<strong>self</strong>,
+    float <strong>boost</strong>,
+    bool <strong>indexed</strong>,
+    bool <strong>stored</strong>,
+    bool <strong>sortable</strong>
 );
 </code></pre>
 <dl>
@@ -118,12 +138,6 @@ span.prefix, span.comment {
 sortable.</p>
 </dd>
 </dl>
-</dd>
-<dt id="func_new">new</dt>
-<dd>
-<pre><code><span class="prefix">lucy_</span>StringType* <span class="comment">// incremented</span>
-<span class="prefix">lucy_</span><strong>StringType_new</strong>(void);
-</code></pre>
 </dd>
 </dl>
 <h2>Methods</h2>

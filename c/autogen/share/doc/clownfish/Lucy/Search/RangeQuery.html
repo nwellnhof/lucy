@@ -97,11 +97,10 @@ span.prefix, span.comment {
 within a given range.</p>
 <h2>Functions</h2>
 <dl>
-<dt id="func_init">init</dt>
+<dt id="func_new">new</dt>
 <dd>
-<pre><code><span class="prefix">lucy_</span>RangeQuery*
-<span class="prefix">lucy_</span><strong>RangeQuery_init</strong>(
-    <span class="prefix">lucy_</span>RangeQuery *<strong>self</strong>,
+<pre><code><span class="prefix">lucy_</span>RangeQuery* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>RangeQuery_new</strong>(
     <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>field</strong>,
     <span class="prefix">cfish_</span><a href="../../Clownfish/Obj.html">Obj</a> *<strong>lower_term</strong>,
     <span class="prefix">cfish_</span><a href="../../Clownfish/Obj.html">Obj</a> *<strong>upper_term</strong>,
@@ -109,9 +108,9 @@ within a given range.</p>
     bool <strong>include_upper</strong>
 );
 </code></pre>
-<p>Takes 5 parameters; <code>field</code> is required, as
-is at least one of either <code>lower_term</code> or
-<code>upper_term</code>.</p>
+<p>Create a new RangeQuery.</p>
+<p>Takes 5 parameters; <code>field</code> is required, as is at least one of either
+<code>lower_term</code> or <code>upper_term</code>.</p>
 <dl>
 <dt>field</dt>
 <dd><p>The name of a <code>sortable</code> field.</p>
@@ -133,6 +132,21 @@ than <code>lower_term</code> will pass.</p>
 <code>upper_term</code> should be included in the results.</p>
 </dd>
 </dl>
+</dd>
+<dt id="func_init">init</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>RangeQuery*
+<span class="prefix">lucy_</span><strong>RangeQuery_init</strong>(
+    <span class="prefix">lucy_</span>RangeQuery *<strong>self</strong>,
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>field</strong>,
+    <span class="prefix">cfish_</span><a href="../../Clownfish/Obj.html">Obj</a> *<strong>lower_term</strong>,
+    <span class="prefix">cfish_</span><a href="../../Clownfish/Obj.html">Obj</a> *<strong>upper_term</strong>,
+    bool <strong>include_lower</strong>,
+    bool <strong>include_upper</strong>
+);
+</code></pre>
+<p>Initialize a RangeQuery.  See <a href="../../Lucy/Search/RangeQuery.html#func_new">new()</a> for a description of the
+parameters.</p>
 </dd>
 </dl>
 <h2>Methods</h2>

@@ -108,17 +108,7 @@ requires a SortSpec with two SortRule elements.</p>
     bool <strong>reverse</strong>
 );
 </code></pre>
-</dd>
-<dt id="func_init">init</dt>
-<dd>
-<pre><code><span class="prefix">lucy_</span>SortRule* <span class="comment">// incremented</span>
-<span class="prefix">lucy_</span><strong>SortRule_init</strong>(
-    <span class="prefix">lucy_</span>SortRule *<strong>self</strong>,
-    int32_t <strong>type</strong>,
-    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>field</strong>,
-    bool <strong>reverse</strong>
-);
-</code></pre>
+<p>Create a new SortRule.</p>
 <dl>
 <dt>type</dt>
 <dd><p>Indicate whether to sort by score, field, etc.  (The
@@ -131,6 +121,19 @@ default is to sort by a field.)</p>
 <dd><p>If true, reverse the order of the sort for this rule.</p>
 </dd>
 </dl>
+</dd>
+<dt id="func_init">init</dt>
+<dd>
+<pre><code><span class="prefix">lucy_</span>SortRule* <span class="comment">// incremented</span>
+<span class="prefix">lucy_</span><strong>SortRule_init</strong>(
+    <span class="prefix">lucy_</span>SortRule *<strong>self</strong>,
+    int32_t <strong>type</strong>,
+    <span class="prefix">cfish_</span><a href="../../Clownfish/String.html">String</a> *<strong>field</strong>,
+    bool <strong>reverse</strong>
+);
+</code></pre>
+<p>Initialize a SortRule.  See <a href="../../Lucy/Search/SortRule.html#func_new">new()</a> for a description of the
+parameters.</p>
 </dd>
 </dl>
 <h2>Methods</h2>
