@@ -116,6 +116,7 @@ Test_create_test_suite() {
     TestSuite_Add_Batch(suite, (TestBatch*)TestRAMFolder_new());
     TestSuite_Add_Batch(suite, (TestBatch*)TestFolder_new());
     TestSuite_Add_Batch(suite, (TestBatch*)TestLFLock_new());
+    TestSuite_Add_Batch(suite, (TestBatch*)TestNativeLock_new());
     TestSuite_Add_Batch(suite, (TestBatch*)TestIxManager_new());
     TestSuite_Add_Batch(suite, (TestBatch*)TestCFWriter_new());
     TestSuite_Add_Batch(suite, (TestBatch*)TestCFReader_new());

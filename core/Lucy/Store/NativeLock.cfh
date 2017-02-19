@@ -14,26 +14,32 @@
  * limitations under the License.
  */
 
-parcel TestLucy;
+parcel Lucy;
 
-class Lucy::Test::Store::TestLockFileLock nickname TestLFLock
-    inherits Clownfish::TestHarness::TestBatch {
+class Lucy::Store::NativeLock inherits Lucy::Store::Lock {
 
-    inert incremented TestLockFileLock*
-    new();
+    String     *lock_path;
+    FileHandle *fh;
 
-    void
-    Run(TestLockFileLock *self, TestBatchRunner *runner);
-}
+    inert incremented NativeLock*
+    new(Folder *folder, String *name, int32_t timeout = 0,
+        int32_t interval = 100);
 
-class Lucy::Test::Store::TestNativeLock
-    inherits Clownfish::TestHarness::TestBatch {
+    public inert NativeLock*
+    init(NativeLock *self, Folder *folder, String *name, int32_t timeout = 0,
+         int32_t interval = 100);
 
-    inert incremented TestNativeLock*
-    new();
+    public bool
+    Request_Shared(NativeLock *self);
 
-    void
-    Run(TestNativeLock *self, TestBatchRunner *runner);
+    public bool
+    Request_Exclusive(NativeLock *self);
+
+    public void
+    Release(NativeLock *self);
+
+    public void
+    Destroy(NativeLock *self);
 }
 
 

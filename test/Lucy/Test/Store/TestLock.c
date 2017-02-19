@@ -31,12 +31,18 @@
 #include "Clownfish/TestHarness/TestBatchRunner.h"
 #include "Lucy/Store/FSFolder.h"
 #include "Lucy/Store/LockFileLock.h"
+#include "Lucy/Store/NativeLock.h"
 #include "Lucy/Store/RAMFolder.h"
 #include "Lucy/Util/Json.h"
 
 TestLockFileLock*
 TestLFLock_new() {
     return (TestLockFileLock*)Class_Make_Obj(TESTLOCKFILELOCK);
+}
+
+TestNativeLock*
+TestNativeLock_new() {
+    return (TestNativeLock*)Class_Make_Obj(TESTNATIVELOCK);
 }
 
 static Folder*
@@ -288,9 +294,50 @@ test_lf_lock(TestBatchRunner *runner) {
     DECREF(ram_folder);
 }
 
+static void
+test_native_lock_with_folder(TestBatchRunner *runner, Folder *folder,
+                             const char *tag) {
+    if (!Folder_Supports_Locks(folder)) {
+        SKIP(runner, 19, "Folder doesn't support native locks");
+        return;
+    }
+
+    NativeLock *lock1, *lock2, *lock3;
+
+    String *name = SSTR_WRAP_C("test");
+    lock1 = NativeLock_new(folder, name, 0, 100);
+    lock2 = NativeLock_new(folder, name, 0, 100);
+    lock3 = NativeLock_new(folder, name, 0, 100);
+    test_lock(runner, (Lock*)lock1, (Lock*)lock2, (Lock*)lock3, tag);
+
+    lock1 = NativeLock_new(folder, name, 10, 1);
+    lock2 = NativeLock_new(folder, name, 10, 1);
+    test_Obtain(runner, (Lock*)lock1, (Lock*)lock2, tag);
+
+    lock1 = NativeLock_new(folder, name, 0, 100);
+    test_double_request_release(runner, (Lock*)lock1, tag);
+}
+
+static void
+test_native_lock(TestBatchRunner *runner) {
+    Folder *fs_folder = S_create_fs_folder();
+    test_native_lock_with_folder(runner, fs_folder, "(FSFolder)");
+    S_destroy_fs_folder(fs_folder);
+
+    Folder *ram_folder = (Folder*)RAMFolder_new(NULL);
+    test_native_lock_with_folder(runner, ram_folder, "(RAMFolder)");
+    DECREF(ram_folder);
+}
+
 void
 TestLFLock_Run_IMP(TestLockFileLock *self, TestBatchRunner *runner) {
     TestBatchRunner_Plan(runner, (TestBatch*)self, 82);
     test_lf_lock(runner);
+}
+
+void
+TestNativeLock_Run_IMP(TestNativeLock *self, TestBatchRunner *runner) {
+    TestBatchRunner_Plan(runner, (TestBatch*)self, 38);
+    test_native_lock(runner);
 }
 
