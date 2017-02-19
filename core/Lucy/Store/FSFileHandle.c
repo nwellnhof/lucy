@@ -22,10 +22,11 @@
 #include "Lucy/Store/ErrorMessage.h"
 #include "Lucy/Store/FSFileHandle.h"
 #include "Lucy/Store/FileWindow.h"
+#include "Lucy/Store/Lock.h" // for LockErr
 
 #define IS_64_BIT (CHY_SIZEOF_PTR == 8 ? 1 : 0)
 
-#if 0
+#if defined(CHY_HAS_FLOCK)
 
 const bool FSFH_supports_locks = true;
 
@@ -244,6 +245,11 @@ FSFH_Release_Window_IMP(FSFileHandle *self, FileWindow *window) {
 #include <sys/mman.h>
 #include <unistd.h> // close
 
+#ifdef CHY_HAS_FLOCK
+  #include <errno.h>
+  #include <sys/file.h>
+#endif
+
 static bool
 S_init(FSFileHandleIVARS *ivars, String *path, uint32_t flags) {
     int posix_flags = 0;
@@ -255,13 +261,35 @@ S_init(FSFileHandleIVARS *ivars, String *path, uint32_t flags) {
     posix_flags |= O_LARGEFILE;
 #endif
 
+    // Don't give others access to lock files to prevent DoS.
+    mode_t mode = flags & (FH_LOCK_EXCLUSIVE | FH_LOCK_SHARED) ? 0660 : 0666;
+
     char *path_ptr = Str_To_Utf8(path);
-    int fd = open(path_ptr, posix_flags, 0666);
+    int fd = open(path_ptr, posix_flags, mode);
     FREEMEM(path_ptr);
     if (fd == -1) {
         ErrMsg_set_with_errno("Attempt to open '%o' failed", path);
         return false;
     }
+
+#ifdef CHY_HAS_FLOCK
+    // Acquire lock.
+    if (flags & (FH_LOCK_EXCLUSIVE | FH_LOCK_SHARED)) {
+        int operation = flags & FH_LOCK_EXCLUSIVE ? LOCK_EX : LOCK_SH;
+
+        if (flock(fd, operation | LOCK_NB) != 0) {
+            if (errno == EWOULDBLOCK) {
+                String *msg = Str_newf("'%o' is locked", ivars->path);
+                Err_set_error((Err*)LockErr_new(msg));
+            }
+            else {
+                ErrMsg_set_with_errno("flock on '%o' failed", ivars->path);
+            }
+
+            return false;
+        }
+    }
+#endif
 
     if (flags & FH_EXCLUSIVE) {
         ivars->len = 0;

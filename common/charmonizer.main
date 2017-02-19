@@ -145,6 +145,43 @@ int main(int argc, const char **argv) {
     chaz_SymbolVisibility_run();
     chaz_VariadicMacros_run();
 
+    chaz_ConfWriter_start_module("Lucy");
+
+    {
+        /*
+         * Check for flock() with BSD semantics that doesn't simply wrap
+         * fcntl().
+         */
+        static const char flock_code[] =
+            CHAZ_QUOTE(  #include <errno.h>                               )
+            CHAZ_QUOTE(  #include <fcntl.h>                               )
+            CHAZ_QUOTE(  #include <stdio.h>                               )
+            CHAZ_QUOTE(  #include <sys/file.h>                            )
+            CHAZ_QUOTE(  int main() {                                     )
+            CHAZ_QUOTE(      const char *path = "_charm_testlock";        )
+            CHAZ_QUOTE(      int fd1;                                     )
+            CHAZ_QUOTE(      int fd2;                                     )
+            CHAZ_QUOTE(      fd1 = open(path, O_CREAT|O_RDONLY, 0600);    )
+            CHAZ_QUOTE(      if (flock(fd1, LOCK_EX|LOCK_NB)) return 1;   )
+            CHAZ_QUOTE(      fd2 = open(path, O_RDONLY, 0600);            )
+            CHAZ_QUOTE(      if (!flock(fd2, LOCK_EX|LOCK_NB)) return 1;  )
+            CHAZ_QUOTE(      if (errno != EWOULDBLOCK) return 1;          )
+            CHAZ_QUOTE(      printf("success");                           )
+            CHAZ_QUOTE(      return 0;                                    )
+            CHAZ_QUOTE(  }                                                );
+        size_t output_len;
+        char *output = chaz_CC_capture_output(flock_code, &output_len);
+
+        if (output != NULL && strcmp(output, "success") == 0) {
+            chaz_ConfWriter_add_def("HAS_FLOCK", NULL);
+        }
+
+        chaz_Util_remove_and_verify("_charm_testlock");
+        free(output);
+    }
+
+    chaz_ConfWriter_end_module();
+
     /* Write custom postamble. */
     chaz_ConfWriter_append_conf(
         "#ifdef CHY_HAS_SYS_TYPES_H\n"
