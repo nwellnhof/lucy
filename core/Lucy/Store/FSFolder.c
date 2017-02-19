@@ -104,6 +104,12 @@ FSFolder_Check_IMP(FSFolder *self) {
     return S_dir_ok(ivars->path);
 }
 
+bool
+FSFolder_Supports_Locks_IMP(FSFolder *self) {
+    UNUSED_VAR(self);
+    return FSFH_supports_locks;
+}
+
 FileHandle*
 FSFolder_Local_Open_FileHandle_IMP(FSFolder *self, String *name,
                                    uint32_t flags) {

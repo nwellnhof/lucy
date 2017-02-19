@@ -54,6 +54,12 @@ RAMFolder_Check_IMP(RAMFolder *self) {
 }
 
 bool
+RAMFolder_Supports_Locks_IMP(RAMFolder *self) {
+    UNUSED_VAR(self);
+    return true;
+}
+
+bool
 RAMFolder_Local_MkDir_IMP(RAMFolder *self, String *name) {
     RAMFolderIVARS *const ivars = RAMFolder_IVARS(self);
     if (Hash_Fetch(ivars->entries, name)) {

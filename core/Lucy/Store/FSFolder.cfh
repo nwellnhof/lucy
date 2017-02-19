@@ -51,6 +51,9 @@ public class Lucy::Store::FSFolder inherits Lucy::Store::Folder {
     bool
     Check(FSFolder *self);
 
+    bool
+    Supports_Locks(FSFolder *self);
+
     void
     Close(FSFolder *self);
 

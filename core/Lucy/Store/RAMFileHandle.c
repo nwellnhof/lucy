@@ -20,6 +20,11 @@
 #include "Lucy/Store/RAMFileHandle.h"
 #include "Lucy/Store/RAMFile.h"
 #include "Lucy/Store/FileWindow.h"
+#include "Lucy/Store/Lock.h" // for LockErr
+
+#define RAMFH_STATE_UNLOCKED          0
+#define RAMFH_STATE_LOCKED_SHARED     1
+#define RAMFH_STATE_LOCKED_EXCLUSIVE  2
 
 RAMFileHandle*
 RAMFH_open(String *path, uint32_t flags, RAMFile *file) {
@@ -56,6 +61,30 @@ RAMFH_do_open(RAMFileHandle *self, String *path, uint32_t flags,
         return NULL;
     }
 
+    // Lock the file.
+    if (flags & FH_LOCK_EXCLUSIVE) {
+        if (RAMFile_Add_Exclusive_Lock(ivars->ram_file)) {
+            ivars->lock_state = RAMFH_STATE_LOCKED_EXCLUSIVE;
+        }
+        else {
+            String *msg = Str_newf("File '%o' is locked", ivars->path);
+            Err_set_error((Err*)LockErr_new(msg));
+            DECREF(self);
+            return NULL;
+        }
+    }
+    else if (flags & FH_LOCK_SHARED) {
+        if (RAMFile_Add_Shared_Lock(ivars->ram_file)) {
+            ivars->lock_state = RAMFH_STATE_LOCKED_SHARED;
+        }
+        else {
+            String *msg = Str_newf("File '%o' is locked", ivars->path);
+            Err_set_error((Err*)LockErr_new(msg));
+            DECREF(self);
+            return NULL;
+        }
+    }
+
     // Prevent writes to to the RAMFile if FH_READ_ONLY was specified.
     if (flags & FH_READ_ONLY) {
         RAMFile_Set_Read_Only(ivars->ram_file, true);
@@ -70,6 +99,17 @@ RAMFH_do_open(RAMFileHandle *self, String *path, uint32_t flags,
 void
 RAMFH_Destroy_IMP(RAMFileHandle *self) {
     RAMFileHandleIVARS *const ivars = RAMFH_IVARS(self);
+
+    // Unlock.
+    if (ivars->lock_state != RAMFH_STATE_UNLOCKED) {
+        if (ivars->lock_state == RAMFH_STATE_LOCKED_SHARED) {
+            RAMFile_Remove_Shared_Lock(ivars->ram_file);
+        }
+        else { // RAMFH_STATE_LOCKED_EXCLUSIVE
+            RAMFile_Remove_Exclusive_Lock(ivars->ram_file);
+        }
+    }
+
     DECREF(ivars->ram_file);
     DECREF(ivars->contents);
     SUPER_DESTROY(self, RAMFILEHANDLE);

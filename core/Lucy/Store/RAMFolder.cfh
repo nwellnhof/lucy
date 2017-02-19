@@ -44,6 +44,9 @@ public class Lucy::Store::RAMFolder inherits Lucy::Store::Folder {
     bool
     Check(RAMFolder *self);
 
+    bool
+    Supports_Locks(RAMFolder *self);
+
     void
     Close(RAMFolder *self);
 

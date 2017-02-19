@@ -214,6 +214,13 @@ public abstract class Lucy::Store::Folder inherits Clownfish::Obj {
     abstract bool
     Check(Folder *self);
 
+    /** Checks whether native locks are supported on files in this folder.
+     *
+     * @return true on success.
+     */
+    abstract bool
+    Supports_Locks(Folder *self);
+
     /** Close the folder and release implementation-specific resources.
      */
     abstract void

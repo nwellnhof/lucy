@@ -27,6 +27,7 @@ class Lucy::Store::RAMFileHandle nickname RAMFH
     RAMFile *ram_file;
     ByteBuf *contents;
     int64_t  len;
+    int      lock_state;
 
     inert incremented nullable RAMFileHandle*
     open(String *path = NULL, uint32_t flags, RAMFile *file = NULL);

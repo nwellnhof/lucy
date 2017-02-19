@@ -20,8 +20,10 @@ parcel Lucy;
  */
 class Lucy::Store::RAMFile inherits Clownfish::Obj {
 
-    bool     read_only;
-    ByteBuf *contents;
+    ByteBuf  *contents;
+    uint32_t  num_shared_locks;
+    bool      exclusive_lock;
+    bool      read_only;
 
     inert incremented RAMFile*
     new(ByteBuf *contents = NULL, bool read_only = false);
@@ -47,6 +49,30 @@ class Lucy::Store::RAMFile inherits Clownfish::Obj {
      */
     void
     Set_Read_Only(RAMFile *self, bool read_only);
+
+    /** Add a shared lock.
+     *
+     * @return true on success, false on failure.
+     */
+    bool
+    Add_Shared_Lock(RAMFile *self);
+
+    /** Add an exclusive lock.
+     *
+     * @return true on success, false on failure.
+     */
+    bool
+    Add_Exclusive_Lock(RAMFile *self);
+
+    /** Remove a shared lock.
+     */
+    void
+    Remove_Shared_Lock(RAMFile *self);
+
+    /** Remove an exclusive lock.
+     */
+    void
+    Remove_Exclusive_Lock(RAMFile *self);
 
     public void
     Destroy(RAMFile *self);

@@ -30,6 +30,8 @@ parcel Lucy;
  * * FH_CREATE - Create the file if it does not yet exist.
  * * FH_EXCLUSIVE - The attempt to open the file should fail if the file
  *   already exists.
+ * * FH_LOCK_SHARED - Acquire a shared lock on the file.
+ * * FH_LOCK_EXCLUSIUVE - Acquire an exclusive lock on the file.
  */
 
 abstract class Lucy::Store::FileHandle nickname FH
@@ -140,10 +142,12 @@ abstract class Lucy::Store::FileHandle nickname FH
 
 __C__
 
-#define LUCY_FH_READ_ONLY  0x1
-#define LUCY_FH_WRITE_ONLY 0x2
-#define LUCY_FH_CREATE     0x4
-#define LUCY_FH_EXCLUSIVE  0x8
+#define LUCY_FH_READ_ONLY       0x01
+#define LUCY_FH_WRITE_ONLY      0x02
+#define LUCY_FH_CREATE          0x04
+#define LUCY_FH_EXCLUSIVE       0x08
+#define LUCY_FH_LOCK_SHARED     0x10
+#define LUCY_FH_LOCK_EXCLUSIVE  0x20
 
 // Default size for the memory buffer used by both InStream and OutStream.
 #define LUCY_IO_STREAM_BUF_SIZE 1024
@@ -154,6 +158,8 @@ __C__
   #define FH_WRITE_ONLY               LUCY_FH_WRITE_ONLY
   #define FH_CREATE                   LUCY_FH_CREATE
   #define FH_EXCLUSIVE                LUCY_FH_EXCLUSIVE
+  #define FH_LOCK_SHARED              LUCY_FH_LOCK_SHARED
+  #define FH_LOCK_EXCLUSIVE           LUCY_FH_LOCK_EXCLUSIVE
 #endif
 __END_C__
 

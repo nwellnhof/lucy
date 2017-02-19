@@ -28,6 +28,8 @@ class Lucy::Store::FSFileHandle nickname FSFH
     int64_t  page_size;
     char    *buf;
 
+    inert const bool supports_locks;
+
     /** Return a new FSFileHandle, or set the global error object returned by
      * [](cfish:cfish.Err.get_error) and return NULL if something goes wrong.
      *

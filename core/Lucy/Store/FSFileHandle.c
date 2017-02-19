@@ -25,6 +25,16 @@
 
 #define IS_64_BIT (CHY_SIZEOF_PTR == 8 ? 1 : 0)
 
+#if 0
+
+const bool FSFH_supports_locks = true;
+
+#else
+
+const bool FSFH_supports_locks = false;
+
+#endif
+
 // Architecture- and OS- specific initialization.
 static bool
 S_init(FSFileHandleIVARS *ivars, String *path, uint32_t flags);
@@ -63,6 +73,14 @@ FSFH_do_open(FSFileHandle *self, String *path, uint32_t flags) {
     if (!path || !Str_Get_Size(path)) {
         ErrMsg_set("Missing required param 'path'");
         DECREF(self);
+        return NULL;
+    }
+
+    if (!FSFH_supports_locks
+        && (flags & (FH_LOCK_SHARED | FH_LOCK_EXCLUSIVE))
+       ) {
+        DECREF(self);
+        THROW(ERR, "File locks not supported on this platform");
         return NULL;
     }
 

@@ -55,4 +55,41 @@ RAMFile_Set_Read_Only_IMP(RAMFile *self, bool read_only) {
     RAMFile_IVARS(self)->read_only = read_only;
 }
 
+bool
+RAMFile_Add_Shared_Lock_IMP(RAMFile *self) {
+    RAMFileIVARS *const ivars = RAMFile_IVARS(self);
+    if (ivars->exclusive_lock || ivars->num_shared_locks == UINT32_MAX) {
+        return false;
+    }
+    ivars->num_shared_locks += 1;
+    return true;
+}
+
+bool
+RAMFile_Add_Exclusive_Lock_IMP(RAMFile *self) {
+    RAMFileIVARS *const ivars = RAMFile_IVARS(self);
+    if (ivars->exclusive_lock || ivars->num_shared_locks > 0) {
+        return false;
+    }
+    ivars->exclusive_lock = true;
+    return true;
+}
+
+void
+RAMFile_Remove_Shared_Lock_IMP(RAMFile *self) {
+    RAMFileIVARS *const ivars = RAMFile_IVARS(self);
+    if (ivars->num_shared_locks == 0) {
+        THROW(ERR, "Trying to remove a shared lock that wasn't added");
+    }
+    ivars->num_shared_locks -= 1;
+}
+
+void
+RAMFile_Remove_Exclusive_Lock_IMP(RAMFile *self) {
+    RAMFileIVARS *const ivars = RAMFile_IVARS(self);
+    if (!ivars->exclusive_lock) {
+        THROW(ERR, "Trying to remove an exclusive lock that wasn't added");
+    }
+    ivars->exclusive_lock = false;
+}
 
