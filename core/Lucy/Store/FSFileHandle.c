@@ -26,7 +26,7 @@
 
 #define IS_64_BIT (CHY_SIZEOF_PTR == 8 ? 1 : 0)
 
-#if defined(CHY_HAS_FLOCK)
+#if defined(CHY_HAS_FLOCK) || defined(CHY_HAS_WINDOWS_H)
 
 const bool FSFH_supports_locks = true;
 
@@ -434,7 +434,9 @@ S_init(FSFileHandleIVARS *ivars, String *path, uint32_t flags) {
     DWORD desired_access       = flags & FH_READ_ONLY
                                  ? GENERIC_READ
                                  : GENERIC_WRITE;
-    DWORD share_mode           = FILE_SHARE_READ;
+    DWORD share_mode           = flags & FH_LOCK_EXCLUSIVE
+                                 ? 0
+                                 : FILE_SHARE_READ;
     DWORD creation_disposition = flags & FH_CREATE
                                  ? flags & FH_EXCLUSIVE
                                    ? CREATE_NEW
@@ -450,7 +452,14 @@ S_init(FSFileHandleIVARS *ivars, String *path, uint32_t flags) {
     FREEMEM(path_ptr);
 
     if (handle == INVALID_HANDLE_VALUE) {
-        ErrMsg_set_with_win_error("CreateFile for '%o' failed", path);
+        if (GetLastError() == ERROR_SHARING_VIOLATION) {
+            String *msg = Str_newf("'%o' is locked", ivars->path);
+            Err_set_error((Err*)LockErr_new(msg));
+        }
+        else {
+            ErrMsg_set_with_win_error("CreateFile for '%o' failed", path);
+        }
+
         return false;
     }
 
