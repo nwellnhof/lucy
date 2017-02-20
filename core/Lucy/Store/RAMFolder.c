@@ -76,9 +76,7 @@ RAMFolder_Local_Open_FileHandle_IMP(RAMFolder *self, String *name,
     RAMFileHandle *fh;
     String *fullpath = S_fullpath(self, name);
     RAMFile *file = (RAMFile*)Hash_Fetch(ivars->entries, name);
-    bool can_create
-        = (flags & (FH_WRITE_ONLY | FH_CREATE)) == (FH_WRITE_ONLY | FH_CREATE)
-          ? true : false;
+    bool can_create = flags & FH_CREATE ? true : false;
 
     // Make sure the filepath isn't a directory, and that it either exists
     // or we have permission to create it.

@@ -36,9 +36,7 @@ RAMFH_do_open(RAMFileHandle *self, String *path, uint32_t flags,
     bool must_create
         = (flags & (FH_CREATE | FH_EXCLUSIVE)) == (FH_CREATE | FH_EXCLUSIVE)
           ? true : false;
-    bool can_create
-        = (flags & (FH_CREATE | FH_WRITE_ONLY)) == (FH_CREATE | FH_WRITE_ONLY)
-          ? true : false;
+    bool can_create = flags & FH_CREATE ? true : false;
 
     // Obtain a RAMFile.
     if (file) {
