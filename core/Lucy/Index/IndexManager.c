@@ -26,6 +26,7 @@
 #include "Lucy/Store/DirHandle.h"
 #include "Lucy/Store/Folder.h"
 #include "Lucy/Store/LockFileLock.h"
+#include "Lucy/Store/NativeLock.h"
 #include "Lucy/Util/IndexFileNames.h"
 #include "Lucy/Util/Json.h"
 
@@ -94,6 +95,7 @@ IxManager_init(IndexManager *self, String *host) {
                                 ? Str_Clone(host)
                                 : Str_new_from_trusted_utf8("", 0);
     ivars->folder              = NULL;
+    ivars->lock_type           = Str_new_from_trusted_utf8("portable", 8);
     ivars->write_lock_timeout  = 1000;
     ivars->write_lock_interval = 100;
     ivars->merge_lock_timeout  = 0;
@@ -107,6 +109,7 @@ IxManager_Destroy_IMP(IndexManager *self) {
     IndexManagerIVARS *const ivars = IxManager_IVARS(self);
     DECREF(ivars->host);
     DECREF(ivars->folder);
+    DECREF(ivars->lock_type);
     SUPER_DESTROY(self, INDEXMANAGER);
 }
 
@@ -223,24 +226,60 @@ IxManager_Choose_Sparse_IMP(IndexManager *self, I32Array *doc_counts) {
     return threshold;
 }
 
+void
+IxManager_Use_Native_Locks_IMP(IndexManager *self) {
+    IndexManagerIVARS *const ivars = IxManager_IVARS(self);
+    DECREF(ivars->lock_type);
+    ivars->lock_type = Str_new_from_trusted_utf8("native", 6);
+}
+
+void
+IxManager_Use_Portable_Locks_IMP(IndexManager *self, String *host) {
+    IndexManagerIVARS *const ivars = IxManager_IVARS(self);
+    DECREF(ivars->lock_type);
+    ivars->lock_type = Str_new_from_trusted_utf8("portable", 8);
+    String *temp = ivars->host;
+    ivars->host = (String*)INCREF(host);
+    DECREF(temp);
+}
+
+String*
+IxManager_Get_Lock_Type_IMP(IndexManager *self) {
+    return IxManager_IVARS(self)->lock_type;
+}
+
+static Lock*
+S_make_lock(IndexManagerIVARS *ivars, String *name, uint32_t timeout,
+            uint32_t interval, bool exclusive_only) {
+    if (Str_Equals_Utf8(ivars->lock_type, "portable", 8)) {
+        return (Lock*)LFLock_new(ivars->folder, name, ivars->host,
+                                 (int32_t)timeout, (int32_t)interval,
+                                 exclusive_only);
+    }
+    else if (Str_Equals_Utf8(ivars->lock_type, "native", 6)) {
+        return (Lock*)NativeLock_new(ivars->folder, name, (int32_t)timeout,
+                                     (int32_t)interval);
+    }
+    else {
+        THROW(ERR, "Unknown lock type '%o'", ivars->lock_type);
+        UNREACHABLE_RETURN(Lock*);
+    }
+}
+
 Lock*
 IxManager_Make_Write_Lock_IMP(IndexManager *self) {
     IndexManagerIVARS *const ivars = IxManager_IVARS(self);
-    String *write_lock_name = SSTR_WRAP_C("write");
-    return (Lock*)LFLock_new(ivars->folder, write_lock_name, ivars->host,
-                             (int32_t)ivars->write_lock_timeout,
-                             (int32_t)ivars->write_lock_interval,
-                             true);
+    return S_make_lock(ivars, SSTR_WRAP_C("write"),
+                       ivars->write_lock_timeout,
+                       ivars->write_lock_interval, true);
 }
 
 Lock*
 IxManager_Make_Merge_Lock_IMP(IndexManager *self) {
     IndexManagerIVARS *const ivars = IxManager_IVARS(self);
-    String *merge_lock_name = SSTR_WRAP_C("merge");
-    return (Lock*)LFLock_new(ivars->folder, merge_lock_name, ivars->host,
-                             (int32_t)ivars->merge_lock_timeout,
-                             (int32_t)ivars->merge_lock_interval,
-                             true);
+    return S_make_lock(ivars, SSTR_WRAP_C("merge"),
+                       ivars->merge_lock_timeout,
+                       ivars->merge_lock_interval, true);
 }
 
 void
@@ -297,8 +336,7 @@ IxManager_Make_Snapshot_Lock_IMP(IndexManager *self, String *filename) {
     size_t lock_name_len = Str_Length(filename) - (sizeof(".json") - 1);
     String *lock_name = Str_SubString(filename, 0, lock_name_len);
 
-    Lock *lock = (Lock*)LFLock_new(ivars->folder, lock_name, ivars->host,
-                                   1000, 100, false);
+    Lock *lock = S_make_lock(ivars, lock_name, 1000, 100, false);
 
     DECREF(lock_name);
     return lock;
@@ -307,6 +345,14 @@ IxManager_Make_Snapshot_Lock_IMP(IndexManager *self, String *filename) {
 void
 IxManager_Set_Folder_IMP(IndexManager *self, Folder *folder) {
     IndexManagerIVARS *const ivars = IxManager_IVARS(self);
+
+    if (folder
+        && Str_Equals_Utf8(ivars->lock_type, "native", 6)
+        && !Folder_Supports_Locks(folder)
+       ) {
+        THROW(ERR, "The platform doesn't support native locks.");
+    }
+
     Folder *temp = ivars->folder;
     ivars->folder = (Folder*)INCREF(folder);
     DECREF(temp);

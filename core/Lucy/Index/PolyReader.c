@@ -446,6 +446,17 @@ PolyReader_do_open(PolyReader *self, Obj *index, Snapshot *snapshot,
         RETHROW(last_error);
     }
 
+    // Warn if there's a lock type mismatch.
+    if (manager) {
+        String *snap_lock_type    = Snapshot_Get_Lock_Type(ivars->snapshot);
+        String *manager_lock_type = IxManager_Get_Lock_Type(manager);
+        if (!Str_Equals(snap_lock_type, (Obj*)manager_lock_type)) {
+            WARN("Index expects %o locks but IndexManager was told to use"
+                 " %o locks. Snapshot read locks won't work.",
+                 snap_lock_type, manager_lock_type);
+        }
+    }
+
     return self;
 }
 

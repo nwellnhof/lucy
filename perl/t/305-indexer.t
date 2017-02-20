@@ -17,72 +17,118 @@ use strict;
 use warnings;
 use lib 'buildlib';
 
-use Test::More tests => 4;
-use Lucy::Test;
+use Test::More tests => 9;
+use Lucy::Test::TestUtils qw( create_temp_folder );
 
-my $folder = Lucy::Store::RAMFolder->new;
-my $schema = Lucy::Test::TestSchema->new;
+my $manager       = Lucy::Index::IndexManager->new;
+my $other_manager = Lucy::Index::IndexManager->new;
 
-my $indexer = Lucy::Index::Indexer->new(
-    index  => $folder,
-    schema => $schema,
-);
+$manager->use_portable_locks('host1');
+$other_manager->use_portable_locks('host2');
+test_write_lock( $manager, $other_manager );
 
-$indexer->add_doc( { content => 'foo' } );
-undef $indexer;
+$manager->use_native_locks;
+$other_manager->use_native_locks;
+test_write_lock( $manager, $other_manager );
 
-$indexer = Lucy::Index::Indexer->new(
-    index  => $folder,
-    schema => $schema,
-);
-$indexer->add_doc( { content => 'foo' } );
-pass("Indexer ignores garbage from interrupted session");
+$manager->use_native_locks;
+$other_manager->use_portable_locks('host2');
+test_lock_type_mismatch( $manager, $other_manager );
+test_lock_type_mismatch( $other_manager, $manager );
 
-SKIP: {
-    skip( "Known leak, though might be fixable", 2 ) if $ENV{LUCY_VALGRIND};
+sub test_write_lock {
+    my ( $manager, $other_manager ) = @_;
+
+    my $folder = create_temp_folder();
+    my $schema = Lucy::Test::TestSchema->new;
+
+    my $indexer = Lucy::Index::Indexer->new(
+        index   => $folder,
+        schema  => $schema,
+        manager => $manager,
+    );
+
+    $indexer->add_doc( { content => 'foo' } );
+    undef $indexer;
+
+    $indexer = Lucy::Index::Indexer->new(
+        index   => $folder,
+        schema  => $schema,
+        manager => $manager,
+    );
+    $indexer->add_doc( { content => 'foo' } );
+    pass("Indexer ignores garbage from interrupted session");
+
+    $other_manager->set_write_lock_timeout(0);
     eval {
-        my $manager
-            = Lucy::Index::IndexManager->new( host => 'somebody_else' );
         my $inv = Lucy::Index::Indexer->new(
-            manager => $manager,
+            manager => $other_manager,
             index   => $folder,
             schema  => $schema,
         );
     };
     like( $@, qr/write.lock/, "failed to get lock with competing host" );
     isa_ok( $@, "Lucy::Store::LockErr", "Indexer throws a LockErr" );
+    $other_manager->set_write_lock_timeout(1000);
+
+    $indexer->commit;
+
+    if ( $manager->get_lock_type ne 'native' ) {
+        my $host = $other_manager->get_host;
+        my $pid = 12345678;
+        do {
+            # Fake a write lock.
+            my $outstream = $folder->open_out('locks/write.lock')
+                or die Clownfish->error;
+            while ( kill( 0, $pid ) ) {
+                $pid++;
+            }
+            $outstream->print(
+                qq|
+                {
+                    "host": "$host",
+                    "pid": "$pid",
+                    "name": "write"
+                }|
+            );
+            $outstream->close;
+
+            eval {
+                my $inv = Lucy::Index::Indexer->new(
+                    manager => $other_manager,
+                    schema  => $schema,
+                    index   => $folder,
+                );
+            };
+
+            # Mitigate (though not eliminate) race condition false failure.
+        } while ( kill( 0, $pid ) );
+
+        ok( !$@, "clobbered lock from same host with inactive pid" );
+    }
 }
 
-my $pid = 12345678;
-do {
-    # Fake a write lock.
-    $folder->delete("locks/write.lock") or die "Couldn't delete 'write.lock'";
-    my $outstream = $folder->open_out('locks/write.lock')
-        or die Clownfish->error;
-    while ( kill( 0, $pid ) ) {
-        $pid++;
-    }
-    $outstream->print(
-        qq|
-        {  
-            "host": "somebody_else",
-            "pid": "$pid",
-            "name": "write"
-        }|
+sub test_lock_type_mismatch {
+    my ( $manager, $other_manager ) = @_;
+
+    my $folder = create_temp_folder();
+    my $schema = Lucy::Test::TestSchema->new;
+
+    my $indexer = Lucy::Index::Indexer->new(
+        index   => $folder,
+        schema  => $schema,
+        manager => $manager,
     );
-    $outstream->close;
+    $indexer->add_doc( { content => 'foo' } );
+    $indexer->commit;
 
     eval {
-        my $manager
-            = Lucy::Index::IndexManager->new( host => 'somebody_else' );
-        my $inv = Lucy::Index::Indexer->new(
-            manager => $manager,
-            schema  => $schema,
+        $indexer = Lucy::Index::Indexer->new(
+            manager => $other_manager,
             index   => $folder,
+            schema  => $schema,
         );
     };
+    like( $@, qr/index expects/i, "failed to get lock with wrong type" );
+}
 
-    # Mitigate (though not eliminate) race condition false failure.
-} while ( kill( 0, $pid ) );
-
-ok( !$@, "clobbered lock from same host with inactive pid" );

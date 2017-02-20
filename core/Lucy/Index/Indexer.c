@@ -77,7 +77,6 @@ Indexer_init(Indexer *self, Schema *schema, Obj *index,
     bool      create   = (flags & Indexer_CREATE)   ? true : false;
     bool      truncate = (flags & Indexer_TRUNCATE) ? true : false;
     Folder   *folder   = S_init_folder(index, create);
-    Snapshot *latest_snapshot = Snapshot_new();
 
     // Init.
     ivars->stock_doc     = Doc_new(NULL, 0);
@@ -85,6 +84,7 @@ Indexer_init(Indexer *self, Schema *schema, Obj *index,
     ivars->optimize      = false;
     ivars->prepared      = false;
     ivars->needs_commit  = false;
+    ivars->snapshot      = Snapshot_new();
     ivars->snapfile      = NULL;
     ivars->merge_lock    = NULL;
 
@@ -107,10 +107,24 @@ Indexer_init(Indexer *self, Schema *schema, Obj *index,
         RETHROW(INCREF(Err_get_error()));
     }
 
+    String *manager_lock_type = IxManager_Get_Lock_Type(ivars->manager);
+
     // Find the latest snapshot or create a new one.
     ivars->latest_snapfile = IxFileNames_latest_snapshot(folder);
     if (ivars->latest_snapfile) {
-        Snapshot_Read_File(latest_snapshot, folder, ivars->latest_snapfile);
+        Snapshot_Read_File(ivars->snapshot, folder, ivars->latest_snapfile);
+
+        String *snap_lock_type = Snapshot_Get_Lock_Type(ivars->snapshot);
+        if (!Str_Equals(snap_lock_type, (Obj*)manager_lock_type)) {
+            String *msg = MAKE_MESS("Index expects %o locks but IndexManager"
+                                    " was told to use %o locks",
+                                    snap_lock_type, manager_lock_type);
+            DECREF(self);
+            Err_throw_mess(ERR, msg);
+        }
+    }
+    else {
+        Snapshot_Set_Lock_Type(ivars->snapshot, manager_lock_type);
     }
 
     // Look for an existing Schema if one wasn't supplied.
@@ -123,7 +137,7 @@ Indexer_init(Indexer *self, Schema *schema, Obj *index,
             THROW(ERR, "No Schema supplied, and can't find one in the index");
         }
         else {
-            String *schema_file = S_find_schema_file(latest_snapshot);
+            String *schema_file = S_find_schema_file(ivars->snapshot);
             Obj *dump = Json_slurp_json(folder, schema_file);
             if (dump) { // read file successfully
                 ivars->schema = (Schema*)CERTIFY(Freezer_load(dump), SCHEMA);
@@ -142,14 +156,13 @@ Indexer_init(Indexer *self, Schema *schema, Obj *index,
     // PolyReader.  Otherwise, start with the most recent Snapshot and an
     // up-to-date PolyReader.
     if (truncate) {
-        ivars->snapshot = Snapshot_new();
+        Snapshot_Truncate(ivars->snapshot);
         ivars->polyreader = PolyReader_new(schema, folder, NULL, NULL, NULL);
         ivars->truncate = true;
     }
     else {
-        ivars->snapshot = (Snapshot*)INCREF(latest_snapshot);
         ivars->polyreader = ivars->latest_snapfile
-                           ? PolyReader_open((Obj*)folder, latest_snapshot,
+                           ? PolyReader_open((Obj*)folder, ivars->snapshot,
                                              NULL)
                            : PolyReader_new(schema, folder, NULL, NULL, NULL);
 
@@ -176,7 +189,7 @@ Indexer_init(Indexer *self, Schema *schema, Obj *index,
 
     // Create a new segment.
     int64_t new_seg_num
-        = IxManager_Highest_Seg_Num(ivars->manager, latest_snapshot) + 1;
+        = IxManager_Highest_Seg_Num(ivars->manager, ivars->snapshot) + 1;
     // If there's a background merge process going on, stay out of its
     // way.
     Hash *merge_data = IxManager_Read_Merge_Data(ivars->manager);
@@ -207,8 +220,6 @@ Indexer_init(Indexer *self, Schema *schema, Obj *index,
     // Grab a local ref to the DeletionsWriter.
     ivars->del_writer = (DeletionsWriter*)INCREF(
                            SegWriter_Get_Del_Writer(ivars->seg_writer));
-
-    DECREF(latest_snapshot);
 
     return self;
 }

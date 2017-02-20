@@ -31,6 +31,7 @@ public class Lucy::Index::IndexManager nickname IxManager
 
     Folder      *folder;
     String      *host;
+    String      *lock_type;
     uint32_t     write_lock_timeout;
     uint32_t     write_lock_interval;
     uint32_t     merge_lock_timeout;
@@ -38,7 +39,10 @@ public class Lucy::Index::IndexManager nickname IxManager
 
     /** Create a new IndexManager.
      *
-     * @param host An identifier which should be unique per-machine.
+     * @param host (DEPRECATED) An identifier which should be unique
+     * per-machine. With Lucy 0.7.0 or later, omit this argument and
+     * set the lock type with [](.Use_Native_Locks) or
+     * [](.Use_Portable_Locks).
      */
     public inert incremented IndexManager*
     new(String *host = NULL);
@@ -95,6 +99,34 @@ public class Lucy::Index::IndexManager nickname IxManager
      */
     uint32_t
     Choose_Sparse(IndexManager *self, I32Array *doc_counts);
+
+    /** Lock the index with kernel locks. Supported on Unix variants with
+     * `flock` and on Windows. Unsupported on Solaris and some derivatives.
+     * May not work with older NFS clients or servers, or other distributed
+     * file systems. Requires Lucy 0.7.0 or later.
+     *
+     * Note that all users of an index must keep the default or set the same
+     * lock type.
+     */
+    public void
+    Use_Native_Locks(IndexManager *self);
+
+    /** Lock the index with portable locks which should work on every
+     * platform but are slow and can leave stale lock files around if a
+     * process or machine crashes.
+     *
+     * This is the default lock type. All users of an index must keep the
+     * default or set the same lock type.
+     *
+     * @param host An identifier which should be unique per-machine.
+     */
+    public void
+    Use_Portable_Locks(IndexManager *self, String *host);
+
+    /** Getter for lock type.
+     */
+    public String*
+    Get_Lock_Type(IndexManager *self);
 
     /** Create the Lock which controls access to modifying the logical content
      * of the index.

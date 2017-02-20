@@ -27,6 +27,7 @@ our @EXPORT_OK = qw(
     create_index
     create_uscon_index
     init_test_index_loc
+    create_temp_folder
     get_uscon_docs
     utf8_test_strings
     test_analyzer
@@ -45,6 +46,10 @@ use Carp;
 # Create a temporary test directory that will be removed at exit.
 sub init_test_index_loc {
     return tempdir( DIR => 't', CLEANUP => 1 );
+}
+
+sub create_temp_folder {
+    return Lucy::Store::FSFolder->new( path => init_test_index_loc() );
 }
 
 # Build a RAM index, using the supplied array of strings as source material.

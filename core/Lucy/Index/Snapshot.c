@@ -28,8 +28,8 @@
 static Vector*
 S_clean_segment_contents(Vector *orig);
 
-int32_t Snapshot_current_file_format = 2;
-static int32_t Snapshot_current_file_subformat = 1;
+int32_t Snapshot_current_file_format = 3;
+static int32_t Snapshot_current_file_subformat = 0;
 
 Snapshot*
 Snapshot_new() {
@@ -42,8 +42,10 @@ S_zero_out(Snapshot *self) {
     SnapshotIVARS *const ivars = Snapshot_IVARS(self);
     DECREF(ivars->entries);
     DECREF(ivars->path);
+    DECREF(ivars->lock_type);
     ivars->entries  = Hash_new(0);
     ivars->path = NULL;
+    ivars->lock_type = Str_new_from_trusted_utf8("portable", 8);
 }
 
 Snapshot*
@@ -57,7 +59,14 @@ Snapshot_Destroy_IMP(Snapshot *self) {
     SnapshotIVARS *const ivars = Snapshot_IVARS(self);
     DECREF(ivars->entries);
     DECREF(ivars->path);
+    DECREF(ivars->lock_type);
     SUPER_DESTROY(self, SNAPSHOT);
+}
+
+void
+Snapshot_Truncate_IMP(Snapshot *self) {
+    SnapshotIVARS *const ivars = Snapshot_IVARS(self);
+    Hash_Clear(ivars->entries);
 }
 
 void
@@ -104,6 +113,19 @@ Snapshot_Get_Path_IMP(Snapshot *self) {
     return Snapshot_IVARS(self)->path;
 }
 
+void
+Snapshot_Set_Lock_Type_IMP(Snapshot *self, String *lock_type) {
+    SnapshotIVARS *const ivars = Snapshot_IVARS(self);
+    String *temp = ivars->lock_type;
+    ivars->lock_type = (String*)INCREF(lock_type);
+    DECREF(temp);
+}
+
+String*
+Snapshot_Get_Lock_Type_IMP(Snapshot *self) {
+    return Snapshot_IVARS(self)->lock_type;
+}
+
 Snapshot*
 Snapshot_Read_File_IMP(Snapshot *self, Folder *folder, String *path) {
     SnapshotIVARS *const ivars = Snapshot_IVARS(self);
@@ -145,6 +167,14 @@ Snapshot_Read_File_IMP(Snapshot *self, Folder *folder, String *path) {
             String *entry
                 = (String*)CERTIFY(Vec_Fetch(list, i), STRING);
             Hash_Store(ivars->entries, entry, (Obj*)CFISH_TRUE);
+        }
+
+        // Extract lock type.
+        if (format >= 3) {
+            DECREF(ivars->lock_type);
+            ivars->lock_type = (String*)INCREF(CERTIFY(
+                            Hash_Fetch_Utf8(snap_data, "lock_type", 9),
+                            STRING));
         }
 
         DECREF(list);
@@ -203,10 +233,23 @@ Snapshot_Write_File_IMP(Snapshot *self, Folder *folder, String *path) {
     Hash_Store_Utf8(all_data, "entries", 7, (Obj*)list);
 
     // Create a JSON-izable data structure.
-    Hash_Store_Utf8(all_data, "format", 6,
-                    (Obj*)Str_newf("%i32", (int32_t)Snapshot_current_file_format));
+    int32_t format;
+    int32_t subformat;
+    if (!ivars->lock_type
+        || Str_Equals_Utf8(ivars->lock_type, "portable", 8)
+       ) {
+        // Write 2.1 format for "portable" lock type.
+        format    = 2;
+        subformat = 1;
+    }
+    else {
+        format    = (int32_t)Snapshot_current_file_format;
+        subformat = (int32_t)Snapshot_current_file_subformat;
+        Hash_Store_Utf8(all_data, "lock_type", 9, INCREF(ivars->lock_type));
+    }
+    Hash_Store_Utf8(all_data, "format", 6, (Obj*)Str_newf("%i32", format));
     Hash_Store_Utf8(all_data, "subformat", 9,
-                    (Obj*)Str_newf("%i32", (int32_t)Snapshot_current_file_subformat));
+                    (Obj*)Str_newf("%i32", subformat));
 
     // Write out JSON-ized data to the new file.
     Json_spew_json((Obj*)all_data, folder, ivars->path);

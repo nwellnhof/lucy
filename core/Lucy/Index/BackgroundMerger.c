@@ -110,6 +110,16 @@ BGMerger_init(BackgroundMerger *self, Obj *index, IndexManager *manager) {
         return self;
     }
 
+    String *snap_lock_type    = Snapshot_Get_Lock_Type(ivars->snapshot);
+    String *manager_lock_type = IxManager_Get_Lock_Type(ivars->manager);
+    if (!Str_Equals(snap_lock_type, (Obj*)manager_lock_type)) {
+        String *msg = MAKE_MESS("Index expects %o locks but IndexManager"
+                                " was told to use %o locks",
+                                snap_lock_type, manager_lock_type);
+        DECREF(self);
+        Err_throw_mess(ERR, msg);
+    }
+
     // Create FilePurger. Zap detritus from previous sessions.
     ivars->file_purger = FilePurger_new(folder, ivars->manager);
     FilePurger_Purge_Aborted_Merge(ivars->file_purger);

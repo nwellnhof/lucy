@@ -30,6 +30,7 @@ public class Lucy::Index::Snapshot inherits Clownfish::Obj {
 
     Hash        *entries;
     String      *path;
+    String      *lock_type;
 
     inert int32_t current_file_format;
 
@@ -100,6 +101,21 @@ public class Lucy::Index::Snapshot inherits Clownfish::Obj {
      */
     public nullable String*
     Get_Path(Snapshot *self);
+
+    /** Setter for lock type.
+     */
+    public void
+    Set_Lock_Type(Snapshot *self, String *type);
+
+    /** Getter for lock type.
+     */
+    public String*
+    Get_Lock_Type(Snapshot *self);
+
+    /** Remove all entries, but keep path and lock type.
+     */
+    public void
+    Truncate(Snapshot *self);
 
     public void
     Destroy(Snapshot *self);
