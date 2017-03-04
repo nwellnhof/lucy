@@ -39,6 +39,9 @@ class Lucy::Store::NativeLock inherits Lucy::Store::Lock {
     Release(NativeLock *self);
 
     public void
+    Release_And_Delete(NativeLock *self);
+
+    public void
     Destroy(NativeLock *self);
 }
 

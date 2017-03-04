@@ -44,6 +44,9 @@ class Lucy::Store::LockFileLock nickname LFLock
     Release(LockFileLock *self);
 
     public void
+    Release_And_Delete(LockFileLock *self);
+
+    public void
     Destroy(LockFileLock *self);
 }
 

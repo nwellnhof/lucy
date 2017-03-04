@@ -97,6 +97,11 @@ abstract class Lucy::Store::Lock inherits Clownfish::Obj {
     public abstract void
     Release(Lock *self);
 
+    /** Release the lock and delete the lock file.
+     */
+    public abstract void
+    Release_And_Delete(Lock *self);
+
     public void
     Destroy(Lock *self);
 }

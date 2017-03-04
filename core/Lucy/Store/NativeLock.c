@@ -66,6 +66,17 @@ NativeLock_Release_IMP(NativeLock *self) {
 }
 
 void
+NativeLock_Release_And_Delete_IMP(NativeLock *self) {
+    NativeLockIVARS *const ivars = NativeLock_IVARS(self);
+
+    NativeLock_Release(self);
+
+    if (!Folder_Delete(ivars->folder, ivars->lock_path)) {
+        WARN("Couldn't delete lock file %o", ivars->lock_path);
+    }
+}
+
+void
 NativeLock_Destroy_IMP(NativeLock *self) {
     NativeLockIVARS *const ivars = NativeLock_IVARS(self);
     DECREF(ivars->lock_path);

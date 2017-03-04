@@ -238,6 +238,11 @@ LFLock_Release_IMP(LockFileLock *self) {
     ivars->state = LFLOCK_STATE_UNLOCKED;
 }
 
+void
+LFLock_Release_And_Delete_IMP(LockFileLock *self) {
+    LFLock_Release(self);
+}
+
 static bool
 S_is_locked_exclusive(LockFileLockIVARS *ivars) {
     return Folder_Exists(ivars->folder, ivars->lock_path)

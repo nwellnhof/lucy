@@ -116,6 +116,7 @@ test_lock(TestBatchRunner *runner, Lock *lock1, Lock *lock2, Lock *lock3,
 
     TEST_TRUE(runner, Lock_Request_Shared(lock2),
               "Request_Shared succeeds after Destroy %s", tag);
+    Lock_Release_And_Delete(lock2);
     DECREF(lock2);
     DECREF(lock3);
 }
@@ -182,6 +183,7 @@ test_Obtain(TestBatchRunner *runner, Lock *lock1, Lock *lock2,
               "Obtain_Exclusive succeeds %s", tag);
     TEST_FALSE(runner, Lock_Obtain_Shared(lock2),
                "Obtain_Shared after Obtain_Exclusive fails %s", tag);
+    Lock_Release_And_Delete(lock1);
     DECREF(lock2);
     DECREF(lock1);
 }
@@ -309,10 +311,12 @@ test_native_lock_with_folder(TestBatchRunner *runner, Folder *folder,
     lock2 = NativeLock_new(folder, name, 0, 100);
     lock3 = NativeLock_new(folder, name, 0, 100);
     test_lock(runner, (Lock*)lock1, (Lock*)lock2, (Lock*)lock3, tag);
+    test_empty_lock_folder(runner, folder, "lock", tag);
 
     lock1 = NativeLock_new(folder, name, 10, 1);
     lock2 = NativeLock_new(folder, name, 10, 1);
     test_Obtain(runner, (Lock*)lock1, (Lock*)lock2, tag);
+    test_empty_lock_folder(runner, folder, "Obtain", tag);
 
     lock1 = NativeLock_new(folder, name, 0, 100);
     test_double_request_release(runner, (Lock*)lock1, tag);
@@ -337,7 +341,7 @@ TestLFLock_Run_IMP(TestLockFileLock *self, TestBatchRunner *runner) {
 
 void
 TestNativeLock_Run_IMP(TestNativeLock *self, TestBatchRunner *runner) {
-    TestBatchRunner_Plan(runner, (TestBatch*)self, 38);
+    TestBatchRunner_Plan(runner, (TestBatch*)self, 46);
     test_native_lock(runner);
 }
 
