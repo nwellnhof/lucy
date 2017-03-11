@@ -169,20 +169,28 @@ Folder_Delete_Tree_IMP(Folder *self, String *path) {
         if (Folder_Local_Is_Directory(enclosing_folder, local)) {
             Folder *inner_folder
                 = Folder_Local_Find_Folder(enclosing_folder, local);
+            if (Folder_is_a(inner_folder, COMPOUNDFILEREADER)) {
+                CompoundFileReader *cf_reader
+                    = (CompoundFileReader*)inner_folder;
+                inner_folder = CFReader_Get_Real_Folder(cf_reader);
+                CFReader_Close(cf_reader);
+            }
             DirHandle *dh = Folder_Local_Open_Dir(inner_folder);
             if (dh) {
                 Vector *files = Vec_new(20);
                 Vector *dirs  = Vec_new(20);
                 while (DH_Next(dh)) {
                     String *entry = DH_Get_Entry(dh);
-                    Vec_Push(files, (Obj*)Str_Clone(entry));
                     if (DH_Entry_Is_Dir(dh) && !DH_Entry_Is_Symlink(dh)) {
                         Vec_Push(dirs, (Obj*)Str_Clone(entry));
+                    }
+                    else {
+                        Vec_Push(files, (Obj*)Str_Clone(entry));
                     }
                     DECREF(entry);
                 }
                 for (size_t i = 0, max = Vec_Get_Size(dirs); i < max; i++) {
-                    String *name = (String*)Vec_Fetch(files, i);
+                    String *name = (String*)Vec_Fetch(dirs, i);
                     bool success = Folder_Delete_Tree(inner_folder, name);
                     if (!success && Folder_Local_Exists(inner_folder, name)) {
                         break;
