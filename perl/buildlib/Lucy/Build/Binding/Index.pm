@@ -287,24 +287,6 @@ END_CONSTRUCTOR
         alias  => 'offsets',
     );
 
-    my $xs_code = <<'END_XS_CODE';
-MODULE = Lucy    PACKAGE = Lucy::Index::IndexReader
-
-void
-set_race_condition_debug1(val_sv)
-    SV *val_sv;
-PPCODE:
-    CFISH_DECREF(lucy_PolyReader_race_condition_debug1);
-    lucy_PolyReader_race_condition_debug1 = (cfish_String*)
-        XSBind_perl_to_cfish_nullable(aTHX_ val_sv, CFISH_STRING);
-
-int32_t
-debug1_num_passes()
-CODE:
-    RETVAL = lucy_PolyReader_debug1_num_passes;
-OUTPUT: RETVAL
-END_XS_CODE
-
     my $binding = Clownfish::CFC::Binding::Perl::Class->new(
         parcel     => "Lucy",
         class_name => "Lucy::Index::IndexReader",
@@ -315,7 +297,6 @@ END_XS_CODE
     );
     $binding->exclude_constructor;
     $binding->bind_method( alias => '_offsets', method => 'Offsets' );
-    $binding->append_xs($xs_code);
     $binding->set_pod_spec($pod_spec);
 
     Clownfish::CFC::Binding::Perl::Class->register($binding);

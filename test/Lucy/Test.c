@@ -36,6 +36,7 @@
 #include "Lucy/Test/Index/TestDocWriter.h"
 #include "Lucy/Test/Index/TestHighlightWriter.h"
 #include "Lucy/Test/Index/TestIndexManager.h"
+#include "Lucy/Test/Index/TestIndexer.h"
 #include "Lucy/Test/Index/TestPolyReader.h"
 #include "Lucy/Test/Index/TestPostingListWriter.h"
 #include "Lucy/Test/Index/TestSegWriter.h"
@@ -145,6 +146,7 @@ Test_create_test_suite() {
     TestSuite_Add_Batch(suite, (TestBatch*)TestBGMerger_new());
     TestSuite_Add_Batch(suite, (TestBatch*)TestSeg_new());
     TestSuite_Add_Batch(suite, (TestBatch*)TestHighlighter_new());
+    TestSuite_Add_Batch(suite, (TestBatch*)TestIndexer_new());
     TestSuite_Add_Batch(suite, (TestBatch*)TestSimple_new());
     TestSuite_Add_Batch(suite, (TestBatch*)TestSpan_new());
     TestSuite_Add_Batch(suite, (TestBatch*)TestHeatMap_new());
