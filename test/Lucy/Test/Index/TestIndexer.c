@@ -41,6 +41,8 @@
 #include "Lucy/Test/TestSchema.h"
 #include "Lucy/Test/Index/NoMergeManager.h"
 #include "Lucy/Util/IndexFileNames.h"
+#include "Lucy/Util/Json.h"
+#include "Lucy/Util/ProcessID.h"
 
 TestIndexer*
 TestIndexer_new() {
@@ -285,6 +287,137 @@ test_read_locking(TestBatchRunner *runner, IndexManager *manager,
     DECREF(root);
 }
 
+typedef struct {
+    Schema *schema;
+    Folder *folder;
+    IndexManager *manager;
+} indexer_new_context;
+
+static void
+S_try_indexer_new(void *vctx) {
+    indexer_new_context *ctx = (indexer_new_context*)vctx;
+    Indexer_new(ctx->schema, (Obj*)ctx->folder, ctx->manager, 0);
+}
+
+static void
+test_write_locking(TestBatchRunner *runner, IndexManager *manager,
+                   IndexManager *other_manager) {
+    Folder *root       = (Folder*)FSFolder_new(SSTR_WRAP_C("_test"));
+    Schema *schema     = (Schema*)TestSchema_new(false);
+    String *index_path = SSTR_WRAP_C("index");
+
+    Folder_Initialize(root);
+    Folder_MkDir(root, index_path);
+    Folder *folder = Folder_Find_Folder(root, index_path);
+
+    {
+        Indexer *indexer = Indexer_new(schema, (Obj*)folder, manager, 0);
+        S_add_doc(indexer, "foo");
+        // Don't commit.
+        DECREF(indexer);
+    }
+
+    IxManager_Set_Write_Lock_Timeout(other_manager, 0);
+
+    {
+        Indexer *indexer = Indexer_new(schema, (Obj*)folder, manager, 0);
+        S_add_doc(indexer, "foo");
+
+        indexer_new_context ctx;
+        ctx.schema = schema;
+        ctx.folder = folder;
+        ctx.manager = other_manager;
+        Err *error = Err_trap(S_try_indexer_new, &ctx);
+        TEST_TRUE(runner, error != NULL,
+                  "failed to get lock with competing host");
+        TEST_TRUE(runner, Err_is_a(error, LOCKERR),
+                  "Indexer throws a LockErr");
+        DECREF(error);
+
+        Indexer_Commit(indexer);
+        DECREF(indexer);
+    }
+
+    if (Str_Equals_Utf8(IxManager_Get_Lock_Type(manager), "portable", 8)) {
+        String *lock_file = SSTR_WRAP_C("locks/write.lock");
+
+        // Fake a write lock.
+        Hash    *hash = Hash_new(0);
+        String  *host = IxManager_Get_Host(other_manager);
+        int64_t  pid  = (int64_t)PID_getpid();
+        Hash_Store_Utf8(hash, "host", 4, INCREF(host));
+        Hash_Store_Utf8(hash, "pid",  3, (Obj*)Str_newf("%i64", pid));
+        Hash_Store_Utf8(hash, "name", 4, (Obj*)Str_newf("write"));
+        Json_spew_json((Obj*)hash, folder, lock_file);
+
+        indexer_new_context ctx;
+        ctx.schema = schema;
+        ctx.folder = folder;
+        ctx.manager = other_manager;
+        Err *error = Err_trap(S_try_indexer_new, &ctx);
+        TEST_TRUE(runner, error != NULL,
+                  "failed to get lock with competing host");
+        TEST_TRUE(runner, Err_is_a(error, LOCKERR),
+                  "Indexer throws a LockErr");
+        DECREF(error);
+
+        Folder_Delete(folder, lock_file);
+        Hash_Store_Utf8(hash, "pid", 3, (Obj*)Str_newf("12345678"));
+        Json_spew_json((Obj*)hash, folder, lock_file);
+
+        Indexer *indexer = Indexer_new(schema, (Obj*)folder, other_manager, 0);
+        TEST_TRUE(runner, indexer != NULL,
+                  "clobbered lock from same host with inactive pid");
+        DECREF(indexer);
+
+        DECREF(hash);
+    }
+
+    IxManager_Set_Write_Lock_Timeout(other_manager, 1000);
+
+    Folder_Delete_Tree(root, index_path);
+    rmdir("_test");
+
+    DECREF(schema);
+    DECREF(root);
+}
+
+static void
+test_lock_type_mismatch(TestBatchRunner *runner, IndexManager *manager,
+                        IndexManager *other_manager) {
+    Folder *root       = (Folder*)FSFolder_new(SSTR_WRAP_C("_test"));
+    Schema *schema     = (Schema*)TestSchema_new(false);
+    String *index_path = SSTR_WRAP_C("index");
+
+    Folder_Initialize(root);
+    Folder_MkDir(root, index_path);
+    Folder *folder = Folder_Find_Folder(root, index_path);
+
+    {
+        Indexer *indexer = Indexer_new(schema, (Obj*)folder, manager, 0);
+        S_add_doc(indexer, "foo");
+        Indexer_Commit(indexer);
+        DECREF(indexer);
+    }
+
+    {
+        indexer_new_context ctx;
+        ctx.schema = schema;
+        ctx.folder = folder;
+        ctx.manager = other_manager;
+        Err *error = Err_trap(S_try_indexer_new, &ctx);
+        TEST_TRUE(runner, error != NULL,
+                  "failed to get lock with wrong type");
+        DECREF(error);
+    }
+
+    Folder_Delete_Tree(root, index_path);
+    rmdir("_test");
+
+    DECREF(schema);
+    DECREF(root);
+}
+
 static void
 test_locking(TestBatchRunner *runner) {
     IndexManager *manager          = IxManager_new(NULL);
@@ -297,11 +430,18 @@ test_locking(TestBatchRunner *runner) {
     IxManager_Use_Portable_Locks(no_merge_manager, host1);
     IxManager_Use_Portable_Locks(other_manager, host2);
     test_read_locking(runner, manager, no_merge_manager, other_manager);
+    test_write_locking(runner, manager, other_manager);
 
     IxManager_Use_Native_Locks(manager);
     IxManager_Use_Native_Locks(no_merge_manager);
     IxManager_Use_Native_Locks(other_manager);
     test_read_locking(runner, manager, no_merge_manager, other_manager);
+    test_write_locking(runner, manager, other_manager);
+
+    IxManager_Use_Native_Locks(manager);
+    IxManager_Use_Portable_Locks(other_manager, host2);
+    test_lock_type_mismatch(runner, manager, other_manager);
+    test_lock_type_mismatch(runner, other_manager, manager);
 
     DECREF(other_manager);
     DECREF(no_merge_manager);
@@ -310,7 +450,7 @@ test_locking(TestBatchRunner *runner) {
 
 void
 TestIndexer_Run_IMP(TestIndexer *self, TestBatchRunner *runner) {
-    TestBatchRunner_Plan(runner, (TestBatch*)self, 28);
+    TestBatchRunner_Plan(runner, (TestBatch*)self, 37);
     test_locking(runner);
 }
 
